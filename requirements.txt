@@ -1,1 +1,3 @@
 aiofiles
+pydantic
+pydantic-settings
