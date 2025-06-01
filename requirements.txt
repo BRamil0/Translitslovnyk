@@ -1,3 +1,4 @@
 aiofiles
 pydantic
 pydantic-settings
+loguru

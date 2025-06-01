@@ -2,7 +2,7 @@
 
 """
 import asyncio
-from source.dictionary import Dictionary
+from source.logger import logger
 
 async def main() -> None:
     """
