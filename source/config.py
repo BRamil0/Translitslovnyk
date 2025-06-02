@@ -21,5 +21,4 @@ class Settings(pydantic_settings.BaseSettings):
     ) -> tuple[pydantic_settings.PydanticBaseSettingsSource, ...]:
         return (pydantic_settings.JsonConfigSettingsSource(settings_cls),)
 
-print(Path(__file__).parent.parent / "config.json")
 settings = Settings()
