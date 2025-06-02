@@ -36,7 +36,7 @@ class Dictionary:
     dictionary: dict
     iod: IODictionary
 
-    def __init__(self, file: Path, iod: IODictionary | None) -> None:
+    def __init__(self, file: Path, iod: IODictionary | None = None) -> None:
         self.dictionary = {}
         self.file = file
         self.iod = iod if iod else IODictionary()
