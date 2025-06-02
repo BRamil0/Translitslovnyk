@@ -41,6 +41,15 @@ class Dictionary:
         self.file = file
         self.iod = iod if iod else IODictionary()
 
+    def __getitem__(self, key):
+        return self.dictionary.__getitem__(key)
+
+    def __setitem__(self, key, value):
+        self.dictionary.__setitem__(key, value)
+
+    def __delitem__(self, key):
+        self.dictionary.__delitem__(key)
+
     async def load(self) -> bool:
         try:
             self.dictionary = await self.iod.read_dictionary(self.file)
