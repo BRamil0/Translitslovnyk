@@ -1,3 +1,6 @@
+"""
+Обробка та реєстрація журналів (логів) за допомогою loguru.
+"""
 import sys
 
 from loguru import logger
