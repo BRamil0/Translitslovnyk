@@ -1,7 +1,12 @@
+"""
+Файл відповідає за налаштування програми.
+"""
 import pydantic_settings
 from pathlib import Path
 
 class Settings(pydantic_settings.BaseSettings):
+    """Клас налаштувань програми."""
+
     language: str = "ukr"
 
     is_log: bool = True
@@ -22,4 +27,4 @@ class Settings(pydantic_settings.BaseSettings):
     ) -> tuple[pydantic_settings.PydanticBaseSettingsSource, ...]:
         return (pydantic_settings.JsonConfigSettingsSource(settings_cls),)
 
-settings = Settings()
+settings: Settings = Settings()
