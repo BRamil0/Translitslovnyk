@@ -29,25 +29,37 @@ class Internationalization:
 
     def __init__(self, path: Path | None = None, language: str | None = None) -> None:
         if path:
+            if not isinstance(path, Path):
+                logger.error("[Internationalization] Об'єкт path має бути типу Path")
+                raise TypeError("Path must be a Path object")
+            logger.debug(f"[Internationalization] Значення path встановлено: {path}, було {self.path}")
             self.path = path
-            logger.debug(f"Internationalization path set to: {self.path}")
         if language:
+            if not isinstance(language, str):
+                logger.error("[Internationalization] Об'єкт language має бути типу str")
+                raise TypeError("Language must be a str object")
             self.language = language
-            logger.debug(f"Internationalization language set to: {self.language}")
+            logger.debug(f"[Internationalization] Значення language встановлено: {language}, було {self.language}")
         self.lm = None
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: str) -> str:
+        if not isinstance(item, str):
+            logger.error(f"Ключ '{item}' має бути типу str, отримано {type(item)}")
+            raise TypeError("Key must be a string")
+
         if not self.lm:
-            logger.warning("Attempted to access language data before it was loaded.")
+            logger.error("Словник локалізації не завантажено.")
             raise KeyError("Language data not loaded")
         if not self.lm.data:
-            logger.warning(f"Language model has no data for key '{item}', returning key itself.")
+            logger.warning(f"Словник локалізації порожній, повертається ключ: {item}")
             return item
+
         value = self.lm.data.get(item)
         if value is None:
-            logger.warning(f"Missing translation for key '{item}', returning key itself.")
+            logger.warning(f"Значення для ключа '{item}' не знайдено, повертається ключ.")
             return item
-        logger.debug(f"Translation found for key '{item}': '{value}'")
+
+        logger.debug(f"Значення для ключа '{item}' знайдено: {value}")
         return value
 
 
@@ -58,30 +70,45 @@ class Internationalization:
         return self.path
 
     def set_path(self, path: Path) -> None:
+        if not isinstance(path, Path):
+            logger.error("[Internationalization] Об'єкт path має бути типу Path")
+            raise TypeError("Path must be a Path object")
+        logger.debug(f"[Internationalization] Значення path встановлено: {path}, було {self.path}")
         self.path = path
-        logger.debug(f"Internationalization path changed to: {self.path}")
 
     def get_language(self) -> str:
         return self.language
 
     def set_language(self, language: str) -> None:
+        if not isinstance(language, str):
+            logger.error("[Internationalization] Об'єкт language має бути типу str")
+            raise TypeError("Language must be a str object")
+        logger.debug(f"[Internationalization] Значення language встановлено: {language}, було {self.language}")
         self.language = language
-        logger.info(f"Language changed to: {self.language}")
 
     async def load_localization(self, language: str | None = None) -> LanguageModel:
         language = language or self.language
+        if not isinstance(language, str):
+            logger.error("[Internationalization] Об'єкт language має бути типу str")
+            raise TypeError("Language must be a str object")
         path = self.path / f"{language}_language.json"
         try:
             async with aiofiles.open(path, "r", encoding="utf-8") as f:
                 content = await f.read()
                 self.lm = LanguageModel.model_validate_json(content)
-                logger.info(f"Localization file '{path.name}' loaded successfully.")
+                logger.info(f"[Internationalization] Локалізація завантажена з файлу: {path.name}")
                 return self.lm
-        except FileNotFoundError:
-            logger.error(f"Localization file '{path.name}' not found.")
+        except FileNotFoundError as e:
+            logger.error(f"[Internationalization] Файл локалізації '{path.name}' не знайдено, помилка: {e}.")
+            raise
+        except pydantic.ValidationError as e:
+            logger.error(f"[Internationalization] Помилка валідації локалізації з файлу: {path.name}, помилка: {e}.")
+            raise
+        except TypeError as e:
+            logger.error(f"[Internationalization] Помилка типу при завантаженні локалізації з файлу: {path.name}, помилка: {e}.")
             raise
         except Exception as e:
-            logger.exception(f"Error loading localization file '{path.name}': {e}")
+            logger.exception(f"[Internationalization] Помилка при завантаженні локалізації з файлу: {path.name}, помилка: {e}.")
             raise
 
 
