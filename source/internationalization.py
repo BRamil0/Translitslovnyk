@@ -41,6 +41,7 @@ class Internationalization:
             self.language = language
             logger.debug(f"[Internationalization] Значення language встановлено: {language}, було {self.language}")
         self.lm = None
+        logger.debug(f"[Internationalization] Ініціалізація Internationalization з path: {self.path}, language: {self.language}")
 
     def __getitem__(self, item: str) -> str:
         if not isinstance(item, str):
