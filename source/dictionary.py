@@ -29,6 +29,17 @@ class IODictionary:
                 logger.error("[IODictionary] Об'єкт path має бути типу Path")
                 raise TypeError("Path must be a Path object")
             self.path = path
+        logger.debug(f"[IODictionary] Ініціалізація IODictionary з шляхом: {self.path}")
+
+    def get_path(self) -> Path:
+        return self.path
+
+    def set_path(self, path: Path) -> None:
+        if not isinstance(path, Path):
+            logger.error("[IODictionary] Об'єкт path має бути типу Path")
+            raise TypeError("Path must be a Path object")
+        logger.debug(f"[IODictionary] Значення path встановлено: {path}, було {self.path}")
+        self.path = path
 
     async def read_dictionary(self, filename: Path | str, directorate: Path | None = None) -> DictionaryModel:
         if isinstance(filename, str):
@@ -74,13 +85,31 @@ class Dictionary:
         self.iod = iod if iod else IODictionary()
 
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> str:
+        if self.dictionary is None:
+            logger.error("[Dictionary] Словник не завантажено, неможливо отримати значення.")
+            raise KeyError("Dictionary not loaded")
+        if not isinstance(key, str):
+            logger.error("[Dictionary] Ключ має бути типу str")
+            raise TypeError("Key must be a string")
         return self.dictionary.data.__getitem__(key)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: str) -> None:
+        if self.dictionary is None:
+            logger.error("[Dictionary] Словник не завантажено, неможливо встановити значення.")
+            raise KeyError("Dictionary not loaded")
+        if not isinstance(key, str) or (not isinstance(value, str) and not isinstance(value, dict)):
+            logger.error("[Dictionary] Ключ і значення мають бути типу str або dict (тільки для значень словника)")
+            raise TypeError("Key and value must be strings")
         self.dictionary.data.__setitem__(key, value)
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: str) -> None:
+        if self.dictionary is None:
+            logger.error("[Dictionary] Словник не завантажено, неможливо видалити значення.")
+            raise KeyError("Dictionary not loaded")
+        if not isinstance(key, str):
+            logger.error("[Dictionary] Ключ має бути типу str")
+            raise TypeError("Key must be a string")
         self.dictionary.data.__delitem__(key)
 
     def get_file(self) -> Path:
