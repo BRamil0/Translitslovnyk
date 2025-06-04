@@ -1,12 +1,11 @@
 """
-Головний файл програми
+Основний файл програми.
 """
 import asyncio
-from source.logger import logger
+
 from source.dictionary import Dictionary
 from source.translate import Translate
-from source.internationalization import internationalization
-
+from source.internationalization import internationalization, i18n
 
 
 async def main() -> None:
@@ -17,7 +16,7 @@ async def main() -> None:
     await internationalization.load_localization()
     dictionary = Dictionary("test.json")
     await dictionary.load()
-    translator = Translate(dictionary, input(internationalization["text"]))
+    translator = Translate(dictionary, input(i18n["text"]))
     print(translator.transliterate())
 
     return
