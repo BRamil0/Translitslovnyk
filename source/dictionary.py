@@ -63,8 +63,10 @@ class Dictionary:
     dictionary: DictionaryModel | None
     iod: IODictionary
 
-    def __init__(self, file: Path, iod: IODictionary | None = None) -> None:
-        if not isinstance(file, Path):
+    def __init__(self, file: Path | str, iod: IODictionary | None = None) -> None:
+        if isinstance(file, str):
+            file = Path(file)
+        elif not isinstance(file, Path):
             raise TypeError("File must be a Path object")
         logger.debug(f"[Dictionary] Ініціалізація словника з файлом: {file}")
         self.dictionary = None
