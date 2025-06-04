@@ -1,5 +1,5 @@
 """
-Файл відповідає за локалізацію
+Файл відповідає за локалізацію (інтернаціоналізацію) програми.
 """
 from pathlib import Path
 
@@ -11,6 +11,8 @@ from source.logger import logger
 
 
 class LanguageModel(pydantic.BaseModel):
+    """Модель для зберігання даних локалізації."""
+
     class InfoModel(pydantic.BaseModel):
         code_3: str
 
@@ -19,6 +21,8 @@ class LanguageModel(pydantic.BaseModel):
 
 
 class Internationalization:
+    """Клас для управління локалізацією програми."""
+
     lm: LanguageModel | None = None
     path: Path = Path(Path(__file__).parent.parent, "internationalization")
     language: str = settings.language
@@ -81,5 +85,5 @@ class Internationalization:
             raise
 
 
-internationalization = Internationalization()
-i18n = internationalization
+internationalization: Internationalization = Internationalization()
+i18n: Internationalization = internationalization
