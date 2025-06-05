@@ -23,7 +23,7 @@ class Translate:
             raise TypeError("Параметр 'text' має бути рядком")
         self.dictionary = dictionary
         self.text = text
-        logger.debug(f"[Translate] Ініціалізовано об'єкт з текстом: '{self.text}' та словником з {len(self.dictionary.dictionary)} елементами")
+        logger.debug(f"[Translate] Ініціалізовано об'єкт з текстом: '{self.text}' та словником з {self.dictionary.dictionary} елементами")
 
     def get_text(self) -> str:
         return self.text
@@ -56,7 +56,7 @@ class Translate:
         text_len = len(self.text)
 
         # Сортуємо ключі словника за спаданням довжини ключа
-        keys_sorted = sorted(self.dictionary.dictionary.keys(), key=len, reverse=True)
+        keys_sorted = sorted(self.dictionary.dictionary.data.keys(), key=len, reverse=True)
 
         while i < text_len:
             matched = False
