@@ -18,6 +18,7 @@ class DictionaryModel(pydantic.BaseModel):
 
     data: dict[str, str] | None = None
     info: InfoModel
+    model_version: str | int = "1.0.0"
 
 class IODictionary:
     """Клас для роботи з файлами словників."""
