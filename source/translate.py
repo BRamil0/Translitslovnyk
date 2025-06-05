@@ -1,25 +1,47 @@
+"""
+Клас для транслітерування тексту за словником.
+"""
+
 from source.dictionary import Dictionary
 from source.logger import logger
 
 
 class Translate:
     """
-    Клас для транслітування або зворотного транслітування тексту за словником.
+    Клас для транслітерування або зворотного транслітерування тексту за словником.
     """
 
     dictionary: Dictionary
     text: str
 
     def __init__(self, dictionary: Dictionary, text: str) -> None:
+        if not isinstance(dictionary, Dictionary):
+            logger.error("[Translate] Помилка ініціалізації: 'dictionary' має бути екземпляром класу Dictionary")
+            raise TypeError("Параметр 'dictionary' має бути екземпляром класу Dictionary")
+        if not isinstance(text, str):
+            logger.error("[Translate] Помилка ініціалізації: 'text' має бути рядком")
+            raise TypeError("Параметр 'text' має бути рядком")
         self.dictionary = dictionary
         self.text = text
         logger.debug(f"[Translate] Ініціалізовано об'єкт з текстом: '{self.text}' та словником з {len(self.dictionary.dictionary)} елементами")
 
+    def get_text(self) -> str:
+        return self.text
+
     def set_text(self, new_text: str) -> None:
+        if not isinstance(new_text, str):
+            logger.error("[Translate] Помилка ініціалізації: 'text' має бути рядком")
+            raise TypeError("Параметр 'text' має бути рядком")
         logger.info(f"[Translate] Змінено текст з '{self.text}' на '{new_text}'")
         self.text = new_text
 
+    def get_dictionary(self) -> Dictionary:
+        return self.dictionary
+
     def set_dictionary(self, new_dictionary: Dictionary) -> None:
+        if not isinstance(new_dictionary, Dictionary):
+            logger.error("[Translate] Помилка ініціалізації: 'dictionary' має бути екземпляром класу Dictionary")
+            raise TypeError("Параметр 'dictionary' має бути екземпляром класу Dictionary")
         logger.info(f"[Translate] Оновлено словник з {len(self.dictionary.dictionary)} до {len(new_dictionary.dictionary)} елементів")
         self.dictionary = new_dictionary
 
