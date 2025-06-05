@@ -7,6 +7,7 @@ from pathlib import Path
 import aiofiles
 import pydantic
 
+from source.config import settings
 from source.logger import logger
 
 
@@ -21,7 +22,7 @@ class DictionaryModel(pydantic.BaseModel):
 class IODictionary:
     """Клас для роботи з файлами словників."""
 
-    path: Path = Path(Path(__file__).parent.parent, "dictionaries")
+    path: Path = settings.path_dictionaries
 
     def __init__(self, path: Path | None = None) -> None:
         if path:
@@ -168,3 +169,57 @@ class Dictionary:
         except (IOError, json.JSONDecodeError) as e:
             logger.error(f"[Dictionary] Помилка при збереженні словника {self.file.name}. Детальніше: {e}")
             return False
+
+class DictionaryManager:
+    """Клас для керування словниками."""
+    path_dictionaries: Path = settings.path_dictionaries
+    list_dictionaries: dict[str, Dictionary] | None = None
+
+    def __init__(self, path: Path | None = None) -> None:
+        if path:
+            if not isinstance(path, Path):
+                logger.error("[DictionaryManager] Об'єкт path має бути типу Path")
+                raise TypeError("Path must be a Path object")
+            self.path_dictionaries = path
+        logger.debug(f"[DictionaryManager] Ініціалізація DictionaryManager з шляхом: {self.path_dictionaries}")
+
+    def __getitem__(self, key: str) -> Dictionary:
+        if self.list_dictionaries is None:
+            logger.error("[DictionaryManager] Список словників не завантажено, неможливо отримати словник.")
+            raise KeyError("Dictionary list not loaded")
+        if not isinstance(key, str):
+            logger.error("[DictionaryManager] Ключ має бути типу str")
+            raise TypeError("Key must be a string")
+        return self.list_dictionaries[key]
+
+    def get_path_dictionaries(self) -> Path:
+        return self.path_dictionaries
+
+    def set_path_dictionaries(self, path: Path) -> None:
+        if not isinstance(path, Path):
+            logger.error("[DictionaryManager] Об'єкт path має бути типу Path")
+            raise TypeError("Path must be a Path object")
+        logger.debug(f"[DictionaryManager] Значення path встановлено: {path}, було {self.path_dictionaries}")
+        self.path_dictionaries = path
+
+    def get_list_dictionaries(self) -> dict[str, Dictionary] | None:
+        if self.list_dictionaries is None:
+            logger.warning("[DictionaryManager] Список словників не завантажено, повертається None.")
+            return None
+        return self.list_dictionaries
+
+    async def index(self) -> dict[str, Dictionary]:
+        """Індексація словників у директорії."""
+        if not self.path_dictionaries.exists():
+            logger.error(f"[DictionaryManager] Директорія словників не існує: {self.path_dictionaries}")
+            raise FileNotFoundError(f"Directory {self.path_dictionaries} does not exist")
+
+        self.list_dictionaries = {}
+        for file in self.path_dictionaries.glob("*.json"):
+            if file.is_file():
+                dictionary = Dictionary(file=file, iod=IODictionary(self.path_dictionaries))
+                await dictionary.load()
+                self.list_dictionaries[file.stem] = dictionary
+                logger.info(f"[DictionaryManager] Словник {file.name} додано до списку.")
+
+        return self.list_dictionaries
