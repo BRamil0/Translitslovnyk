@@ -154,6 +154,7 @@ class Dictionary:
             self.dictionary = await self.iod.read_dictionary(self.file)
             if not self.dictionary.data:
                 logger.warning(f"[Dictionary] Словник {self.file.name} не містить даних.")
+                self.dictionary.data = {}
                 return False
             logger.info(f"[Dictionary] Словник {self.file.name} завантажено успішно.")
             return True
