@@ -24,7 +24,7 @@ class Internationalization:
     """Клас для управління локалізацією програми."""
 
     lm: LanguageModel | None = None
-    path: Path = Path(Path(__file__).parent.parent, "internationalization")
+    path: Path = settings.path_internationalization
     language: str = settings.language
 
     def __init__(self, path: Path | None = None, language: str | None = None) -> None:

@@ -14,6 +14,10 @@ class Settings(pydantic_settings.BaseSettings):
     LOG_DIR: Path = Path(__file__).parent.parent / "temp" / "logs"
     LOG_FORMAT: str = "<y>IDP:{process}</y> <ly>SPT:{elapsed}</ly> | <g>{time:YYYY-MM-DD}</g> <lg>{time:HH:mm:ss}</lg> | <level>{level}</level> | <m>F:{file}</m> <lm>L:{line} FU:{function}</lm> | {message}"
 
+    path_dictionaries = Path(__file__).parent.parent / "dictionaries"
+    path_temp = Path(__file__).parent.parent / "temp"
+    path_internationalization = Path(__file__).parent.parent / "internationalization"
+
     model_config = pydantic_settings.SettingsConfigDict(json_file=(Path(__file__).parent.parent / "config.json"))
 
     @classmethod
