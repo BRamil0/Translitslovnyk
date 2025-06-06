@@ -11,7 +11,7 @@ class ConsoleUI:
         pass
 
     @staticmethod
-    async def display_message(self, message: str) -> None:
+    async def display_message(message: str) -> None:
         """
         Відображає повідомлення в консолі.
 
@@ -20,7 +20,7 @@ class ConsoleUI:
         print(message)
 
     @staticmethod
-    async def get_input(self, prompt: str) -> str:
+    async def get_input(prompt: str) -> str:
         """
         Отримує вхідні дані від користувача.
 
