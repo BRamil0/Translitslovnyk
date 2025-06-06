@@ -14,14 +14,16 @@ class Translate:
     dictionary: Dictionary
     text: str
 
-    def __init__(self, dictionary: Dictionary, text: str) -> None:
+    def __init__(self, dictionary: Dictionary, text: str | None = None) -> None:
         if not isinstance(dictionary, Dictionary):
             logger.error("[Translate] Помилка ініціалізації: 'dictionary' має бути екземпляром класу Dictionary")
             raise TypeError("Параметр 'dictionary' має бути екземпляром класу Dictionary")
-        if not isinstance(text, str):
+        if not isinstance(text, str) and text is not None:
             logger.error("[Translate] Помилка ініціалізації: 'text' має бути рядком")
             raise TypeError("Параметр 'text' має бути рядком")
         self.dictionary = dictionary
+        if text is None:
+            text = ""
         self.text = text
         logger.debug(f"[Translate] Ініціалізовано об'єкт з текстом: '{self.text}' та словником з {self.dictionary.dictionary} елементами")
 
@@ -45,11 +47,15 @@ class Translate:
         logger.info(f"[Translate] Оновлено словник з {len(self.dictionary.dictionary)} до {len(new_dictionary.dictionary)} елементів")
         self.dictionary = new_dictionary
 
-    def transliterate(self) -> str:
+    def transliterate(self, text: str | None = None) -> str:
         """
         Ітеративно транслітує текст, використовуючи словник.
         Якщо ключа не знайдено, символ залишається без змін.
         """
+
+        if text is not None:
+            self.set_text(text)
+
         logger.debug(f"[Translate] Початок транслітерації {self.text}")
         result = []
         i = 0
