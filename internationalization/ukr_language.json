@@ -3,6 +3,18 @@
         "code_3": "ukr"
     },
     "data": {
-        "text": "Текст: "
+        "text": "Текст: ",
+        "title": "Заголовок: ",
+        "description": "Опис: ",
+        "author": "Автор: ",
+        "date": "Дата: ",
+        "list_dictionaries": "Список доступних словників: ",
+        "enter_dictionary": "Введіть словник: ",
+        "dictionary_selected": "Вибрано словник: {}",
+        "dictionary_not_found": "Словник не знайдено: {}",
+        "enter_text_to_transliterate": "Введіть текст для транслітерації (напишіть exit_transliterate_mode для виходу з пз): ",
+        "transliteration_result": "Результат транслітерації: {}",
+        "transliteration_exiting": "Вихід з режиму транслітерації."
+
     }
 }
