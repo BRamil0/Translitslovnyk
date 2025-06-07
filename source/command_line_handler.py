@@ -31,7 +31,7 @@ async def parse_command_line_arguments() -> argparse.Namespace:
     if all(value is None for value in vars(args).values()):
         return args
 
-    if not args.dictionary or (not args.text and not args.input):
+    if not args.dictionary and not args.text and not args.input:
         logger.error("Необхідно вказати словник та текст або файл для транслітерації.")
         parser.error("Необхідно вказати словник та текст або файл для транслітерації.")
 
