@@ -2,7 +2,7 @@
 Інтерфейс користувача для консолі.
 """
 
-from source.dictionary import Dictionary, DictionaryManager
+from source.dictionary import DictionaryManager
 from source.internationalization import i18n
 
 
@@ -33,16 +33,15 @@ class ConsoleUI:
         """
         return input(prompt)
 
-    @staticmethod
-    async def display_dictionary_list(dictionary_manager: DictionaryManager) -> None:
+    async def display_dictionary_list(self, dictionary_manager: DictionaryManager) -> None:
         """
         Відображає список словників.
 
         :param dictionary_manager: Менеджер словників.
         """
-        await cui.display_message(i18n["list_dictionaries"])
+        await self.display_message(i18n["list_dictionaries"])
         for key in dictionary_manager.get_list_dictionaries():
-            await cui.display_message(f"{dictionary_manager[key].dictionary.info.name} - {key}")
+            await self.display_message(f"{dictionary_manager[key].dictionary.info.name} - {key}")
 
 cui: ConsoleUI = ConsoleUI()
 
