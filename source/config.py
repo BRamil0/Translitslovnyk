@@ -21,7 +21,7 @@ class Settings(pydantic_settings.BaseSettings):
 
     PATH_LOG_DIR: Path = Path(__file__).parent.parent / "temp" / "logs"
     PATH_TEMP: Path = Path(__file__).parent.parent / "temp"
-    PATH_JSON_FILE_SETTINGS = Path(__file__).parent.parent / "config.json"
+    PATH_JSON_FILE_SETTINGS: Path = Path(__file__).parent.parent / "config.json"
 
     model_config = pydantic_settings.SettingsConfigDict(json_file=PATH_JSON_FILE_SETTINGS)
 
