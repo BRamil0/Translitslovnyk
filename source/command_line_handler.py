@@ -20,6 +20,8 @@ async def add_parser_arguments(parser: argparse.ArgumentParser) -> None:
 
     parser.add_argument("-v", "--version")
     parser.add_argument("-a", "--author")
+    parser.add_argument("-g", "--github")
+
 
     parser.add_argument("-l", "--language", required=False, type=str, help="Мова для інтернаціоналізації.")
 
