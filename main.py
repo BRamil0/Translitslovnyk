@@ -65,11 +65,19 @@ async def main() -> None:
     if all(value is None for value in vars(args).values()):
         await interactive_mode(dm)
 
+    elif args.information:
+        await cui.display_message(i18n["program_info"].format(settings.version,
+                                                              settings.language,
+                                                              settings.is_log,
+                                                              settings.is_show_log))
+
     elif args.version:
         await cui.display_message(i18n["version_info"].format(settings.version))
 
     elif args.author:
-        await cui.display_message(i18n["author_info"].format("https://radomyr.net/", "https://github.com/BRamil0"))
+        await cui.display_message(i18n["author_info"].format("https://radomyr.net/",
+                                                             "https://github.com/BRamil0",
+                                                             "qulowg@gmail.com"))
 
     elif args.github:
         await cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitbukv"))
@@ -77,6 +85,7 @@ async def main() -> None:
     elif args.language:
         settings.language = args.language
         await cui.display_message(i18n["language_set"].format(settings.language))
+        await settings.safe_settings()
 
     elif (args.dictionary or args.text or args.input) and not args.output:
         if args.input:
