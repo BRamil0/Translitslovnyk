@@ -18,6 +18,11 @@ async def add_parser_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("-i", "--input", required=False, type=Path, help="Шлях до вхідного файлу з текстом для транслітерації.")
     parser.add_argument("-o", "--output", required=False, type=Path, help="Шлях до вихідного файлу для збереження результатів транслітерації.")
 
+    parser.add_argument("-v", "--version")
+    parser.add_argument("-a", "--author")
+
+    parser.add_argument("-l", "--language", required=False, type=str, help="Мова для інтернаціоналізації.")
+
 async def parse_command_line_arguments() -> argparse.Namespace:
     """
     Парсить аргументи командного рядка.
