@@ -1,8 +1,16 @@
 {
     "info": {
-        "code_3": "ukr"
+        "code_3": "ukr",
+        "name": "Українська",
+        "name_latin": "Ukrajins`ka",
+        "name_end": "Ukrainian"
     },
     "data": {
+        "yes": "Так",
+        "no": "Ні",
+        "true": "Правда",
+        "false": "Брехня",
+
         "text": "Текст: ",
         "title": "Заголовок: ",
         "description": "Опис: ",
@@ -14,7 +22,12 @@
         "dictionary_not_found": "Словник не знайдено: {}",
         "enter_text_to_transliterate": "Введіть текст для транслітерації (напишіть exit_transliterate_mode для виходу з пз): ",
         "transliteration_result": "Результат транслітерації: {}",
-        "transliteration_exiting": "Вихід з режиму транслітерації."
+        "transliteration_exiting": "Вихід з режиму транслітерації.",
 
+        "program_info": "Інформація про програму:\nВерсія: {}\nМова: {}\nАвтор: Радомир \"BRamil\" Б.\n Реєстрація журналу: {}\n Чи показувати журнал: {}",
+        "version_info": "Версія програми: {}",
+        "author_info": "Автор програми: Радомир \"BRamil\" Б.\nВебсайт: {}\nGitHub: {}\nЕпошта: {}",
+        "github_info": "Ви можете знайти код програми на GitHub: {}",
+        "language_set": "Мову було встановлено на: {}"
     }
 }
