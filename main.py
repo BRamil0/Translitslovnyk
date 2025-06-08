@@ -3,6 +3,9 @@
 """
 import asyncio
 import argparse
+from pathlib import Path
+
+import aiofiles
 
 from source.dictionary import Dictionary, DictionaryManager
 from source.translate import Translate
@@ -40,6 +43,14 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
         await cui.display_message(i18n["transliteration_result"].format(translator.transliterate(selected_text)))
     return None
 
+async def files_mode(dm: DictionaryManager, dictionary: str, input_path: Path, output_path: Path):
+    async with aiofiles.open(str(input_path), mode='r', encoding='utf-8') as infile, \
+               aiofiles.open(str(output_path), mode='w', encoding='utf-8') as outfile:
+        async for line in infile:
+            processed_line: str = Translate(dm[dictionary]).transliterate(line)
+            await outfile.write(processed_line + '\n')
+
+
 async def main() -> None:
     """
     Головна функція програми.
@@ -48,17 +59,37 @@ async def main() -> None:
     dm: DictionaryManager = DictionaryManager()
     await dm.index()
     args: argparse.Namespace = await parse_command_line_arguments()
+
     if all(value is None for value in vars(args).values()):
         await interactive_mode(dm)
-        return None
-    if (args.dictionary or args.text) and not args.output:
+
+    elif (args.dictionary or args.text or args.input) and not args.output:
         if args.input:
-            pass
+            input_path: Path = Path(args.input)
+            if not input_path.exists():
+                logger.error(f"Файл {input_path} не знайдено.")
+                await cui.display_message(i18n["input_file_not_found"].format(input_path))
+                return None
+            async with aiofiles.open(input_path, mode='r', encoding='utf-8') as file:
+                text = await file.read()
         else:
             text = args.text
         await interactive_mode(dm, text, args.dictionary)
-    elif args.input and args.output:
-        pass
+
+    elif args.input and args.output and args.dictionary:
+        input_path: Path = Path(args.input)
+        output_path: Path = Path(args.output)
+        if not input_path.exists():
+            logger.error(f"Файл {input_path} не знайдено.")
+            await cui.display_message(i18n["input_file_not_found"].format(input_path))
+            return None
+        if args.dictionary not in dm.get_list_dictionaries():
+            logger.error(f"Словник {args.dictionary} не знайдено.")
+            await cui.display_message(i18n["dictionary_not_found"].format(args.dictionary))
+            return None
+        logger.debug(f"Виконання транслітерації з файлу {input_path} за словником {args.dictionary} у файл {output_path}")
+        await files_mode(dm, args.dictionary, input_path, output_path)
+
     return None
 
 if __name__ == "__main__":
