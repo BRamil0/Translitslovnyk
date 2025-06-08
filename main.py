@@ -13,6 +13,8 @@ from source.internationalization import internationalization, i18n
 from source.console_ui import cui
 from source.command_line_handler import parse_command_line_arguments
 from source.logger import logger
+from source.config import settings
+
 
 async def interactive_mode(dm: DictionaryManager, selected_text: str | None = None, selected_dictionary: str | None = None) -> None:
     """
@@ -62,6 +64,19 @@ async def main() -> None:
 
     if all(value is None for value in vars(args).values()):
         await interactive_mode(dm)
+
+    elif args.version:
+        await cui.display_message(i18n["version_info"].format(settings.version))
+
+    elif args.author:
+        await cui.display_message(i18n["author_info"].format("https://radomyr.net/", "https://github.com/BRamil0"))
+
+    elif args.github:
+        await cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitbukv"))
+
+    elif args.language:
+        settings.language = args.language
+        await cui.display_message(i18n["language_set"].format(settings.language))
 
     elif (args.dictionary or args.text or args.input) and not args.output:
         if args.input:
