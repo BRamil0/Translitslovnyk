@@ -11,7 +11,7 @@ from source.console_ui import cui
 from source.command_line_handler import parse_command_line_arguments
 from source.logger import logger
 
-async def interactive_mode(dm: DictionaryManager, selected_text: str | None = None, selected_dictionary: Dictionary | None = None) -> None:
+async def interactive_mode(dm: DictionaryManager, selected_text: str | None = None, selected_dictionary: str | None = None) -> None:
     """
     Режим інтерактивного використання програми.
     """
@@ -65,6 +65,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, EOFError) as e:
-        print("\n")
-        asyncio.run(cui.display_message(i18n["transliteration_exiting"]))
+        asyncio.run(cui.display_message(i18n["transliteration_exiting"] + "\n"))
         logger.debug(f"Вихід з програми через помилку: {e}, скоріше за все, це було викликано натисканням Ctrl+C або Ctrl+D.")
