@@ -18,10 +18,10 @@ async def add_parser_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("-i", "--input", required=False, type=Path, help="Шлях до вхідного файлу з текстом для транслітерації.")
     parser.add_argument("-o", "--output", required=False, type=Path, help="Шлях до вихідного файлу для збереження результатів транслітерації.")
 
-    parser.add_argument("-v", "--version")
-    parser.add_argument("-a", "--author")
-    parser.add_argument("-g", "--github")
-
+    parser.add_argument("-v", "--version", required=False, action="store_true", help="Показати версію програми.")
+    parser.add_argument("-a", "--author", required=False, action="store_true", help="Показати інформацію про автора програми.")
+    parser.add_argument("-g", "--github", required=False, action="store_true", help="Показати посилання на репозиторій GitHub програми.")
+    parser.add_argument("-info", "--information", required=False, action="store_true", help="Показати інформацію про програму.")
 
     parser.add_argument("-l", "--language", required=False, type=str, help="Мова для інтернаціоналізації.")
 
