@@ -13,7 +13,7 @@ async def add_parser_arguments(parser: argparse.ArgumentParser) -> None:
 
     :param parser: Парсер аргументів командного рядка.
     """
-    parser.add_argument("-d", "--dictionary", required=False, type=Path, help="Шлях до словника для транслітерації.")
+    parser.add_argument("-d", "--dictionary", required=False, type=str, help="Шлях до словника для транслітерації.")
     parser.add_argument("-t", "--text", required=False, type=str, help="Текст для транслітерації.")
     parser.add_argument("-i", "--input", required=False, type=Path, help="Шлях до вхідного файлу з текстом для транслітерації.")
     parser.add_argument("-o", "--output", required=False, type=Path, help="Шлях до вихідного файлу для збереження результатів транслітерації.")
