@@ -1,6 +1,12 @@
 {
     "info": {
-        "name": "Test"
+        "name": "Test",
+        "to_language": "test",
+        "from_language": "test",
+        "description": "Test dictionary for testing purposes",
+        "version": "1.0.0",
+        "id": "test-dictionary",
+        "author": "Test Author"
     },
     "data": {
         "Shch": "Щ",
