@@ -2,7 +2,10 @@
 Інтерфейс користувача для консолі.
 """
 
-from source.dictionary import DictionaryManager
+from rich.console import Console
+from rich.table import Table
+
+from source.dictionary import DictionaryManager, Dictionary
 from source.internationalization import i18n
 
 
@@ -10,9 +13,13 @@ class ConsoleUI:
     """
     Клас для взаємодії з користувачем через консоль.
     """
+    console: Console
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, console: Console | None = None) -> None:
+        if console is not None:
+            self.console = console
+        else:
+            self.console = Console()
 
     @staticmethod
     async def display_message(message: str) -> None:
@@ -39,9 +46,29 @@ class ConsoleUI:
 
         :param dictionary_manager: Менеджер словників.
         """
-        await self.display_message(i18n["list_dictionaries"])
+        if not dictionary_manager.get_list_dictionaries():
+            await self.display_message(i18n["no_dictionaries_found"])
+            return
+
+        table = Table(title=i18n["dictionaries_list_title"])
+        table.add_column(i18n["name"], style="cyan", no_wrap=True, min_width=5)
+        table.add_column(i18n["author"], style="green", no_wrap=True, min_width=5)
+        table.add_column(i18n["description"], style="blue", no_wrap=True, max_width=20)
+        table.add_column(i18n["id"], style="cyan", no_wrap=True, min_width=5)
+        table.add_column(i18n["version"], style="green", no_wrap=True, min_width=5)
+        table.add_column(i18n["file_name"], style="cyan", no_wrap=True, min_width=5)
+
         for key in dictionary_manager.get_list_dictionaries():
-            await self.display_message(f"{dictionary_manager[key].dictionary.info.name} - {key}")
+            dictionary = dictionary_manager[key].get_dictionary()
+            table.add_row(
+                dictionary.info.name,
+                dictionary.info.author,
+                str(dictionary.info.description or i18n["no_description"]),
+                dictionary.info.id,
+                dictionary.info.version,
+                str(dictionary.info.file_name),
+            )
+        self.console.print(table)
 
 cui: ConsoleUI = ConsoleUI()
 
