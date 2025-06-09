@@ -6,7 +6,15 @@
         "description": "Test dictionary for testing purposes",
         "version": "1.0.0",
         "id": "test-dictionary",
-        "author": "Test Author"
+        "author": "Test Author",
+        "author_url": "https://example.com/",
+        "author_email": "info@example.com",
+        "license": "",
+        "license_url": "",
+        "created_at": "2025-06-09",
+        "updated_at": "2025-06-09",
+        "source": "",
+        "site_url": "https://example.com/"
     },
     "data": {
         "Shch": "Щ",
