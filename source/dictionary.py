@@ -17,10 +17,21 @@ class DictionaryModel(pydantic.BaseModel):
         name: str
         description: str
         author: str
+        author_url: str = ""
+        author_email: str = ""
         to_language: str
         from_language: str
         version: str
         id: str
+
+        license: str
+        license_url: str = ""
+
+        created_at: str = ""
+        updated_at: str = ""
+
+        source: str = ""
+        site_url: str = ""
 
         file_name: str = ""
         file_path: Path = Path("")
