@@ -21,7 +21,9 @@ class DictionaryModel(pydantic.BaseModel):
         from_language: str
         version: str
         id: str
+
         file_name: str = ""
+        file_path: Path = Path("")
 
     data: dict[str, str] | None = None
     info: InfoModel
@@ -63,6 +65,7 @@ class IODictionary:
             logger.debug(f"[IODictionary] Читання словника з файлу: {path}")
             dictionary = DictionaryModel.model_validate_json(content)
             dictionary.info.file_name = path.name
+            dictionary.info.file_path = path
             return dictionary
 
     async def write_dictionary(self, filename: Path | str, dictionary: DictionaryModel, directorate: Path | None = None) -> DictionaryModel:
@@ -74,7 +77,7 @@ class IODictionary:
                 raise TypeError("Filename must be a Path or str object")
             path = filename
         async with aiofiles.open(path, "w", encoding="utf-8") as f:
-            await f.write(dictionary.model_dump_json(indent=4, exclude_none=True))
+            await f.write(dictionary.model_dump_json(indent=4, exclude_none=True, exclude={'info': {'file_name', 'file_path'}}))
         logger.debug(f"[IODictionary] Запис словника у файл: {path}")
         return dictionary
 
