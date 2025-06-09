@@ -103,6 +103,19 @@ async def main() -> None:
         await cui.display_message(i18n["language_set"].format(settings.language))
         await settings.safe_settings()
 
+    elif args.information_dictionary:
+        if args.dictionary:
+            dictionary_name = args.dictionary
+        else:
+            dictionary_name = args.information_dictionary
+
+        dictionary: Dictionary | None = await search_dictionary(dm, dictionary_name)
+        if dictionary is None:
+            logger.error(f"Словник {dictionary_name} не знайдено.")
+            await cui.display_message(i18n["dictionary_not_found"].format(dictionary_name))
+            return None
+        await cui.display_dictionary(dictionary)
+
     elif (args.dictionary or args.text or args.input) and not args.output:
         if args.input:
             input_path: Path = Path(args.input)
