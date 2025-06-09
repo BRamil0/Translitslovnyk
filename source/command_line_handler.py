@@ -23,6 +23,8 @@ async def add_parser_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("-g", "--github", required=False, action="store_true", help="Показати посилання на репозиторій GitHub програми.")
     parser.add_argument("-info", "--information", required=False, action="store_true", help="Показати інформацію про програму.")
 
+    parser.add_argument("-id", "--information_dictionary", required=False, type=str, help="Показати інформацію про словник за його назвою, назвою файлу або ID.")
+
     parser.add_argument("-l", "--language", required=False, type=str, help="Мова для інтернаціоналізації.")
 
 async def parse_command_line_arguments() -> argparse.Namespace:
