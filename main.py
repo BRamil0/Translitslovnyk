@@ -41,6 +41,7 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
             dictionary = await search_dictionary(dm, selected_dictionary)
             if dictionary is None:
                 await cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
+                await cui.display_dictionary_list(dm)
                 continue
             await cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
             break
