@@ -15,6 +15,13 @@ class DictionaryModel(pydantic.BaseModel):
     """Модель словника."""
     class InfoModel(pydantic.BaseModel):
         name: str
+        description: str
+        author: str
+        to_language: str
+        from_language: str
+        version: str
+        id: str
+        file_name: str = ""
 
     data: dict[str, str] | None = None
     info: InfoModel
@@ -54,7 +61,9 @@ class IODictionary:
         async with aiofiles.open(path, "r", encoding="utf-8") as f:
             content = await f.read()
             logger.debug(f"[IODictionary] Читання словника з файлу: {path}")
-            return DictionaryModel.model_validate_json(content)
+            dictionary = DictionaryModel.model_validate_json(content)
+            dictionary.info.file_name = path.name
+            return dictionary
 
     async def write_dictionary(self, filename: Path | str, dictionary: DictionaryModel, directorate: Path | None = None) -> DictionaryModel:
         if isinstance(filename, str):
@@ -185,14 +194,19 @@ class DictionaryManager:
             self.path_dictionaries = path
         logger.debug(f"[DictionaryManager] Ініціалізація DictionaryManager з шляхом: {self.path_dictionaries}")
 
-    def __getitem__(self, key: str) -> Dictionary:
+    def __getitem__(self, key: str) -> Dictionary | None:
         if self.list_dictionaries is None:
             logger.error("[DictionaryManager] Список словників не завантажено, неможливо отримати словник.")
             raise KeyError("Dictionary list not loaded")
         if not isinstance(key, str):
             logger.error("[DictionaryManager] Ключ має бути типу str")
             raise TypeError("Key must be a string")
-        return self.list_dictionaries[key]
+        dictionary = self.list_dictionaries.get(key)
+        if dictionary is None:
+            logger.warning(f"[DictionaryManager] Словник з ключем {key} не знайдено.")
+            return None
+        logger.debug(f"[DictionaryManager] Словник з ключем {key} знайдено: {dictionary.get_file().name}")
+        return dictionary
 
     def get_path_dictionaries(self) -> Path:
         return self.path_dictionaries
@@ -210,6 +224,26 @@ class DictionaryManager:
             return None
         return self.list_dictionaries
 
+    def search_dictionary(self, key: str, type: str | None = None) -> Dictionary | None:
+        if not type:
+            type = "file_name"
+        if self.list_dictionaries is None:
+            logger.error("[DictionaryManager] Список словників не завантажено, неможливо отримати словник.")
+            raise KeyError("Dictionary list not loaded")
+        if not isinstance(key, str):
+            logger.error("[DictionaryManager] Ім'я словника має бути типу str")
+            raise TypeError("Name must be a string")
+        if not isinstance(type, str):
+            logger.error("[DictionaryManager] Тип словника має бути типу str")
+            raise TypeError("Type must be a string")
+
+        for dictionary in self.list_dictionaries.values():
+            if dictionary.get_dictionary() and getattr(dictionary.get_dictionary().info, type) == key:
+                return dictionary
+
+        logger.warning(f"[DictionaryManager] Словник з ім'ям {key} та атрибутом {type} не знайдено.")
+        return None
+
     async def index(self) -> dict[str, Dictionary]:
         """Індексація словників у директорії."""
         if not self.path_dictionaries.exists():
@@ -221,7 +255,7 @@ class DictionaryManager:
             if file.is_file():
                 dictionary = Dictionary(file=file, iod=IODictionary(self.path_dictionaries))
                 await dictionary.load()
-                self.list_dictionaries[file.stem] = dictionary
+                self.list_dictionaries[dictionary.get_dictionary().info.file_name] = dictionary
                 logger.info(f"[DictionaryManager] Словник {file.name} додано до списку.")
 
         return self.list_dictionaries
