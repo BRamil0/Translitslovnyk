@@ -15,6 +15,20 @@ from source.command_line_handler import parse_command_line_arguments
 from source.logger import logger
 from source.config import settings
 
+async def search_dictionary(dm: DictionaryManager, dictionary_name: str) -> Dictionary | None:
+    """
+    Пошук словника за назвою.
+
+    :param dm: Менеджер словників.
+    :param dictionary_name: Назва словника для пошуку.
+    :return: Знайдений словник або None, якщо не знайдено.
+    """
+    dictionary: Dictionary | None = dm.search_dictionary(dictionary_name)
+    if dictionary is None:
+        dictionary = dm.search_dictionary(dictionary_name, "id")
+    if dictionary is None:
+        dictionary = dm.search_dictionary(dictionary_name, "name")
+    return dictionary
 
 async def interactive_mode(dm: DictionaryManager, selected_text: str | None = None, selected_dictionary: str | None = None) -> None:
     """
@@ -24,14 +38,14 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
         await cui.display_dictionary_list(dm)
         while True:
             selected_dictionary: str = await cui.get_input(i18n["enter_dictionary"])
-            if selected_dictionary in dm.get_list_dictionaries():
-                dictionary: Dictionary = dm[selected_dictionary]
-                await cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
-                break
-            else:
+            dictionary = await search_dictionary(dm, selected_dictionary)
+            if dictionary is None:
                 await cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
+                continue
+            await cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
+            break
     else:
-        dictionary = dm[selected_dictionary]
+        dictionary = await search_dictionary(dm, selected_dictionary)
 
     translator: Translate = Translate(dictionary)
     if selected_text is None:
@@ -62,7 +76,7 @@ async def main() -> None:
     await dm.index()
     args: argparse.Namespace = await parse_command_line_arguments()
 
-    if all(value is None for value in vars(args).values()):
+    if all((value is None or value is False) for value in vars(args).values()):
         await interactive_mode(dm)
 
     elif args.information:
@@ -120,6 +134,6 @@ async def main() -> None:
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-    except (KeyboardInterrupt, EOFError) as e:
-        asyncio.run(cui.display_message(i18n["transliteration_exiting"] + "\n"))
+    except (KeyboardInterrupt, EOFError, UnicodeDecodeError) as e:
+        asyncio.run(cui.display_message("\n" + i18n["transliteration_exiting"]))
         logger.debug(f"Вихід з програми через помилку: {e}, скоріше за все, це було викликано натисканням Ctrl+C або Ctrl+D.")
