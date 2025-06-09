@@ -40,6 +40,15 @@ class ConsoleUI:
         """
         return input(prompt)
 
+
+    async def display_dictionary(self, dictionary: Dictionary):
+        """
+        Відображає інформацію про словник.
+
+        :param dictionary: Словник для відображення.
+        """
+        pass
+
     async def display_dictionary_list(self, dictionary_manager: DictionaryManager) -> None:
         """
         Відображає список словників.
