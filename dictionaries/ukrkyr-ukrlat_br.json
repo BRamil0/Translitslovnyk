@@ -1,18 +1,25 @@
 {
     "info": {
         "name": "Укрлат-Укркир",
-        "to_language": "Українська кирилиця",
-        "from_language": "Українська латиниця",
         "description": "Українська латиниця в українську кирилицю.",
-        "version": "1.0.0",
-        "id": "ukrlat-ukrkyr_br",
+        "example": "Щастям б'єш жук їх глицю в фон й ґедзь пріч.",
+
         "author": "Radomyr \"BRamil\" B.",
         "author_url": "https://radomyr.net/",
         "author_email": "qulowg@gmail.com",
+
+        "from_language": "Українська латиниця",
+        "to_language": "Українська кирилиця",
+
+        "version": "1.0.0",
+        "id": "ukrlat-ukrkyr_br",
+
         "license": "",
         "license_url": "",
+
         "created_at": "2025-06-09",
         "updated_at": "2025-06-09",
+
         "source": "",
         "site_url": "https://radomyr.net/"
     },

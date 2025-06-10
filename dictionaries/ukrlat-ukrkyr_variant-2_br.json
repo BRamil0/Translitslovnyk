@@ -1,18 +1,25 @@
 {
     "info": {
         "name": "Укркир-Укрлат: Варіант Б",
-        "to_language": "Українська латиниця",
-        "from_language": "Українська кирилиця",
         "description": "Українська кирилиця в українську латину (варіант Б).",
-        "version": "1.0.0",
-        "id": "ukrkyr-ukrlat_v2_br",
+        "example": "Shchastjam b'jesh zhuk jih glycju v fon j ghedz` prich.",
+
         "author": "Radomyr \"BRamil\" B.",
         "author_url": "https://radomyr.net/",
         "author_email": "qulowg@gmail.com",
+
+        "from_language": "Українська кирилиця",
+        "to_language": "Українська латиниця",
+
+        "version": "1.0.0",
+        "id": "ukrkyr-ukrlat_v2_br",
+
         "license": "",
         "license_url": "",
+
         "created_at": "2025-06-09",
         "updated_at": "2025-06-09",
+
         "source": "",
         "site_url": "https://radomyr.net/"
     },

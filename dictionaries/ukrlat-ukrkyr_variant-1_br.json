@@ -1,18 +1,25 @@
 {
     "info": {
         "name": "Укркир-Укрлат: Варіант А",
-        "to_language": "Українська латиниця",
-        "from_language": "Українська кирилиця",
         "description": "Українська кирилиця в українську латину (варіант А).",
-        "version": "1.0.0",
-        "id": "ukrkyr-ukrlat_v1_br",
+        "example": "Ščastjam b'ješ žuk jih glycju v fon j gˇedz` prič.",
+
         "author": "Radomyr \"BRamil\" B.",
         "author_url": "https://radomyr.net/",
         "author_email": "qulowg@gmail.com",
+
+        "from_language": "Українська кирилиця",
+        "to_language": "Українська латиниця",
+
+        "version": "1.0.0",
+        "id": "ukrkyr-ukrlat_v1_br",
+
         "license": "",
         "license_url": "",
+
         "created_at": "2025-06-09",
         "updated_at": "2025-06-09",
+
         "source": "",
         "site_url": "https://radomyr.net/"
     },
