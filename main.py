@@ -77,7 +77,13 @@ async def main() -> None:
     """
     Головна функція програми.
     """
-    await internationalization.load_localization()
+    try:
+        await internationalization.load_localization()
+    except FileNotFoundError as e:
+        logger.error(f"Файл локалізації не знайдено: {e}. Перевірте наявність файлу в директорії {settings.path_internationalization}. Або змініть config.json, щоб вказати іншу мову.")
+        await cui.display_message("Не вдалося завантажити мову, рекомендується почистити файл config.json")
+        raise e
+
     dm: DictionaryManager = DictionaryManager()
     await dm.index()
     args: argparse.Namespace = await parse_command_line_arguments()
@@ -104,6 +110,16 @@ async def main() -> None:
         await cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitbukv"))
 
     elif args.language:
+        try:
+            internationalization.set_language(args.language)
+            await internationalization.load_localization()
+        except FileNotFoundError as e:
+            internationalization.set_language(settings.language)
+            await internationalization.load_localization()
+
+            logger.error(f"Файл локалізації для мови {args.language} не знайдено: {e}.")
+            await cui.display_message(i18n["language_file_not_found"].format(args.language))
+            return None
         settings.language = args.language
         await cui.display_message(i18n["language_set"].format(settings.language))
         await settings.safe_settings()
