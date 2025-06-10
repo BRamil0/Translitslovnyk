@@ -27,7 +27,7 @@ async def add_parser_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("-info", "--information", required=False, action="store_true", help= i18n["--information_help"])
 
     parser.add_argument("-id", "--information_dictionary", required=False, type=str, help= i18n["--information_dictionary_help"])
-
+    parser.add_argument("-ld", "--list_dictionary", required=False, action="store_true", type=str, help= i18n["--list_dictionary_help"])
     parser.add_argument("-l", "--language", required=False, type=str, help= i18n["--language_help"])
 
 async def parse_command_line_arguments() -> argparse.Namespace:
