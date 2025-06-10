@@ -122,7 +122,7 @@ async def main() -> None:
             return None
         settings.language = args.language
         await cui.display_message(i18n["language_set"].format(settings.language))
-        await settings.safe_settings()
+        await settings.save_settings()
 
     elif args.information_dictionary:
         if args.dictionary:

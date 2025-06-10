@@ -36,11 +36,16 @@ class Settings(pydantic_settings.BaseSettings):
     ) -> tuple[pydantic_settings.PydanticBaseSettingsSource, ...]:
         return (pydantic_settings.JsonConfigSettingsSource(settings_cls),)
 
-    async def safe_settings(self) -> None:
+    async def save_settings(self, save_path: bool = False) -> None:
         """
         Асинхронний метод для безпечного збереження налаштувань.
         """
+        if save_path:
+            exclude = {}
+        else:
+            exclude = {"PATH_LOG_DIR", "PATH_TEMP", "path_dictionaries", "path_internationalization"}
+
         async with aiofiles.open(self.PATH_JSON_FILE_SETTINGS, mode='w', encoding='utf-8') as f:
-            await f.write(self.model_dump_json(indent=4, exclude_none=True))
+            await f.write(self.model_dump_json(indent=4, exclude_none=True, exclude=exclude))
 
 settings: Settings = Settings()
