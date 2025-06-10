@@ -1,10 +1,26 @@
 """
 Файл відповідає за налаштування програми.
 """
-import pydantic_settings
+import json
 from pathlib import Path
 
+import pydantic_settings
 import aiofiles
+
+class CustomJsonConfigSettingsSource(pydantic_settings.JsonConfigSettingsSource):
+    """
+    Спеціалізований завантажувач налаштувань з JSON, якій
+    коректно обробляє порожні, відсутні або пошкоджені файли.
+    """
+    def _read_file(self, file_path: Path) -> dict[str, object]:
+        """
+        Перевизначаємо метод читання файлу, щоб обробити помилки.
+        """
+        try:
+            return super()._read_file(file_path)
+        except (FileNotFoundError, json.JSONDecodeError):
+            print("Файл налаштувань не знайдено або пошкоджено. Використовуються налаштування за замовчуванням.")
+            return {}
 
 class Settings(pydantic_settings.BaseSettings):
     """Клас налаштувань програми."""
@@ -34,7 +50,13 @@ class Settings(pydantic_settings.BaseSettings):
             dotenv_settings: pydantic_settings.PydanticBaseSettingsSource,
             file_secret_settings: pydantic_settings.PydanticBaseSettingsSource,
     ) -> tuple[pydantic_settings.PydanticBaseSettingsSource, ...]:
-        return (pydantic_settings.JsonConfigSettingsSource(settings_cls),)
+        return (
+            init_settings,
+            env_settings,
+            dotenv_settings,
+            CustomJsonConfigSettingsSource(settings_cls),
+            file_secret_settings,
+        )
 
     async def save_settings(self, save_path: bool = False) -> None:
         """
