@@ -47,6 +47,11 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
             break
     else:
         dictionary = await search_dictionary(dm, selected_dictionary)
+        if dictionary is None:
+            logger.error(f"Словник {selected_dictionary} не знайдено.")
+            await cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
+            return None
+        await cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
 
     translator: Translate = Translate(dictionary)
     if selected_text is None:
