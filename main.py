@@ -121,6 +121,12 @@ async def main() -> None:
             return None
         await cui.display_dictionary(dictionary)
 
+    elif args.list_dictionary:
+        if not dm.get_list_dictionaries():
+            await cui.display_message(i18n["no_dictionaries_found"])
+        else:
+            await cui.display_dictionary_list(dm)
+
     elif (args.dictionary or args.text or args.input) and not args.output:
         if args.input:
             input_path: Path = Path(args.input)
