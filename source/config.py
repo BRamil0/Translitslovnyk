@@ -40,7 +40,7 @@ class Settings(pydantic_settings.BaseSettings):
         """
         Асинхронний метод для безпечного збереження налаштувань.
         """
-        with await aiofiles.open(self.PATH_JSON_FILE_SETTINGS, mode='w', encoding='utf-8') as f:
+        async with aiofiles.open(self.PATH_JSON_FILE_SETTINGS, mode='w', encoding='utf-8') as f:
             await f.write(self.model_dump_json(indent=4, exclude_none=True))
 
 settings: Settings = Settings()
