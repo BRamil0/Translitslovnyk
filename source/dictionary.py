@@ -16,11 +16,15 @@ class DictionaryModel(pydantic.BaseModel):
     class InfoModel(pydantic.BaseModel):
         name: str
         description: str
+        example: str = ""
+
         author: str
         author_url: str = ""
         author_email: str = ""
-        to_language: str
+
         from_language: str
+        to_language: str
+
         version: str
         id: str
 
