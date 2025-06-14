@@ -256,7 +256,11 @@ class DictionaryManager:
             raise TypeError("Type must be a string")
 
         for dictionary in self.list_dictionaries.values():
-            if dictionary.get_dictionary() and getattr(dictionary.get_dictionary().info, field) == key:
+            if dictionary.get_dictionary() and key == str(getattr(dictionary.get_dictionary().info, field)):
+                return dictionary
+
+        for dictionary in self.list_dictionaries.values():
+            if dictionary.get_dictionary() and key in str(getattr(dictionary.get_dictionary().info, field)):
                 return dictionary
 
         logger.warning(f"[DictionaryManager] Словник з ім'ям {key} та атрибутом {field} не знайдено.")
