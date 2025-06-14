@@ -23,11 +23,12 @@ async def search_dictionary(dm: DictionaryManager, dictionary_name: str) -> Dict
     :param dictionary_name: Назва словника для пошуку.
     :return: Знайдений словник або None, якщо не знайдено.
     """
-    dictionary: Dictionary | None = dm.search_dictionary(dictionary_name)
-    if dictionary is None:
-        dictionary = dm.search_dictionary(dictionary_name, "id")
-    if dictionary is None:
-        dictionary = dm.search_dictionary(dictionary_name, "name")
+    dictionary: Dictionary | None = None
+    fields = ["id", "name", "file_path", "file_name"]
+    for field in fields:
+        dictionary = dm.search_dictionary(dictionary_name, field)
+        if dictionary is not None:
+            break
     return dictionary
 
 async def interactive_mode(dm: DictionaryManager, selected_text: str | None = None, selected_dictionary: str | None = None) -> None:
