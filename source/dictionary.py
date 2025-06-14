@@ -35,7 +35,7 @@ class DictionaryModel(pydantic.BaseModel):
         updated_at: str = ""
 
         source: str = ""
-        site_url: str = ""
+        source_url: str = ""
 
         file_name: str = ""
         file_path: Path = Path("")
