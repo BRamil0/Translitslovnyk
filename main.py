@@ -108,8 +108,9 @@ async def main() -> None:
         is_log = i18n["yes"] if settings.is_log else i18n["no"]
         is_show_log = i18n["yes"] if settings.is_show_log else i18n["no"]
 
-        await cui.display_message(i18n["program_info"].format(settings.version, i18n.get_lm().info.name,
-                                                              is_log, is_show_log))
+        await cui.display_message(i18n["program_info"].format(settings.version,
+                                                              "https://github.com/BRamil0/Translitbukv/",
+                                                              i18n.get_lm().info.name, is_log, is_show_log))
 
     elif args.version:
         await cui.display_message(i18n["version_info"].format(settings.version))
