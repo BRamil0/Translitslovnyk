@@ -21,24 +21,22 @@ class ConsoleUI:
         else:
             self.console = Console()
 
-    @staticmethod
-    async def display_message(message: str) -> None:
+    async def display_message(self, message: str) -> None:
         """
         Відображає повідомлення в консолі.
 
         :param message: Повідомлення для відображення.
         """
-        print(message)
+        self.console.print(message)
 
-    @staticmethod
-    async def get_input(prompt: str) -> str:
+    async def get_input(self, prompt: str) -> str:
         """
         Отримує вхідні дані від користувача.
 
         :param prompt: Запит для користувача.
         :return: Введені дані.
         """
-        return input(prompt)
+        return self.console.input(prompt)
 
 
     async def display_dictionary(self, dictionary: Dictionary):
