@@ -49,7 +49,7 @@ class ConsoleUI:
 
         di = dictionary.get_dictionary().info
         text = Text()
-        text.append(f"{i18n['dictionary_info_title']}\n", style="bold underline green")
+        text.append(f"{i18n['dictionary_info_title']}: \n", style="bold underline green")
 
         for key, value in di.__dict__.items():
             if not value:
