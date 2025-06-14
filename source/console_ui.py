@@ -70,7 +70,7 @@ class ConsoleUI:
         table = Table(title=i18n["dictionaries_list_title"])
         table.add_column(i18n["name"], style="cyan", no_wrap=True, min_width=5)
         table.add_column(i18n["author"], style="green", no_wrap=True, min_width=5)
-        table.add_column(i18n["example"], style="blue", no_wrap=True, max_width=20)
+        table.add_column(i18n["example"], style="blue", no_wrap=True, max_width=40)
         table.add_column(i18n["id"], style="cyan", no_wrap=True, min_width=5)
         table.add_column(i18n["version"], style="green", no_wrap=True, min_width=5)
         table.add_column(i18n["file_name"], style="cyan", no_wrap=True, min_width=5)
@@ -80,7 +80,7 @@ class ConsoleUI:
             table.add_row(
                 dictionary.info.name,
                 dictionary.info.author,
-                str(dictionary.info.example or i18n["no_example"]),
+                str(dictionary.info.example or i18n["no_data"]),
                 dictionary.info.id,
                 dictionary.info.version,
                 str(dictionary.info.file_name),
