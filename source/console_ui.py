@@ -4,6 +4,7 @@
 
 from rich.console import Console
 from rich.table import Table
+from rich.markdown import Markdown
 
 from source.dictionary import DictionaryManager, Dictionary
 from source.internationalization import i18n
@@ -45,7 +46,16 @@ class ConsoleUI:
 
         :param dictionary: Словник для відображення.
         """
-        pass
+
+        di = dictionary.get_dictionary().info
+        text = f"__{i18n["dictionary_info_title"]}__ \n\n"
+
+        for key, value in di.__dict__.items():
+            if value is None or value == "":
+                value = i18n["no_data"]
+            text += f"__{i18n[key]}__: *{value}*  \n"
+
+        self.console.print(Markdown(text))
 
     async def display_dictionary_list(self, dictionary_manager: DictionaryManager) -> None:
         """
