@@ -4,7 +4,7 @@
 
 from rich.console import Console
 from rich.table import Table
-from rich.markdown import Markdown
+from rich.text import Text
 
 from source.dictionary import DictionaryManager, Dictionary
 from source.internationalization import i18n
@@ -48,14 +48,20 @@ class ConsoleUI:
         """
 
         di = dictionary.get_dictionary().info
-        text = f"__{i18n["dictionary_info_title"]}__ \n\n"
+        text = Text()
+        text.append(f"{i18n['dictionary_info_title']}\n", style="bold underline green")
 
         for key, value in di.__dict__.items():
-            if value is None or value == "":
+            if not value:
                 value = i18n["no_data"]
-            text += f"__{i18n[key]}__: *{value}*  \n"
+            text.append(Text.assemble(
+                (" • ", "yellow"),
+                (f"{i18n[key]}", "bold #AA00AA"),
+                (": ", "dim"),
+                (f"{value}\n", "italic cyan"),
+            ))
 
-        self.console.print(Markdown(text))
+        self.console.print(text)
 
     async def display_dictionary_list(self, dictionary_manager: DictionaryManager) -> None:
         """
