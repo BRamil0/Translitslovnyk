@@ -10,13 +10,33 @@
         "no": "Ні",
         "true": "Правда",
         "false": "Брехня",
+        "no_data": "Немає даних",
 
         "dictionaries_list_title": "Список доступних словників",
+        "dictionary_info_title": "Інформація про словник",
         "name": "Назва",
-        "author": "Автор",
         "description": "Опис",
-        "id": "Ідентифікатор",
+        "example": "Приклад",
+
+        "author": "Автор",
+        "author_url": "URL автора",
+        "author_email": "Електронна пошта автора",
+
+        "from_language": "З мови",
+        "to_language": "На мову",
+
         "version": "Версія",
+        "id": "Ідентифікатор",
+
+        "license": "Ліцензія",
+        "license_url": "URL ліцензії",
+
+        "created_at": "Створено",
+        "updated_at": "Оновлено",
+
+        "source": "Джерело",
+        "source_url": "URL джерела",
+
         "file_name": "Ім'я файлу",
         "file_path": "Шлях до файлу",
 
