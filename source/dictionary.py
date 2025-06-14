@@ -242,24 +242,24 @@ class DictionaryManager:
             return None
         return self.list_dictionaries
 
-    def search_dictionary(self, key: str, type: str | None = None) -> Dictionary | None:
-        if not type:
-            type = "file_name"
+    def search_dictionary(self, key: str, field: str | None = None) -> Dictionary | None:
+        if not field:
+            field = "file_name"
         if self.list_dictionaries is None:
             logger.error("[DictionaryManager] Список словників не завантажено, неможливо отримати словник.")
             raise KeyError("Dictionary list not loaded")
         if not isinstance(key, str):
             logger.error("[DictionaryManager] Ім'я словника має бути типу str")
             raise TypeError("Name must be a string")
-        if not isinstance(type, str):
-            logger.error("[DictionaryManager] Тип словника має бути типу str")
+        if not isinstance(field, str):
+            logger.error("[DictionaryManager] Поле словника має бути типу str")
             raise TypeError("Type must be a string")
 
         for dictionary in self.list_dictionaries.values():
-            if dictionary.get_dictionary() and getattr(dictionary.get_dictionary().info, type) == key:
+            if dictionary.get_dictionary() and getattr(dictionary.get_dictionary().info, field) == key:
                 return dictionary
 
-        logger.warning(f"[DictionaryManager] Словник з ім'ям {key} та атрибутом {type} не знайдено.")
+        logger.warning(f"[DictionaryManager] Словник з ім'ям {key} та атрибутом {field} не знайдено.")
         return None
 
     async def index(self) -> dict[str, Dictionary]:
