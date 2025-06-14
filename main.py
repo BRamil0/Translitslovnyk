@@ -89,10 +89,22 @@ async def main() -> None:
     await dm.index()
     args: argparse.Namespace = await parse_command_line_arguments()
 
-    if all((value is None or value is False) for value in vars(args).values()):
-        await interactive_mode(dm)
+    if args.language:
+        try:
+            internationalization.set_language(args.language)
+            await internationalization.load_localization()
+        except FileNotFoundError as e:
+            internationalization.set_language(settings.language)
+            await internationalization.load_localization()
 
-    elif args.information:
+            logger.error(f"Файл локалізації для мови {args.language} не знайдено: {e}.")
+            await cui.display_message(i18n["language_file_not_found"].format(args.language))
+            return None
+        settings.language = args.language
+        await cui.display_message(i18n["language_set"].format(settings.language))
+        await settings.save_settings()
+
+    if args.information:
         is_log = i18n["yes"] if settings.is_log else i18n["no"]
         is_show_log = i18n["yes"] if settings.is_show_log else i18n["no"]
 
@@ -109,21 +121,6 @@ async def main() -> None:
 
     elif args.github:
         await cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitbukv"))
-
-    elif args.language:
-        try:
-            internationalization.set_language(args.language)
-            await internationalization.load_localization()
-        except FileNotFoundError as e:
-            internationalization.set_language(settings.language)
-            await internationalization.load_localization()
-
-            logger.error(f"Файл локалізації для мови {args.language} не знайдено: {e}.")
-            await cui.display_message(i18n["language_file_not_found"].format(args.language))
-            return None
-        settings.language = args.language
-        await cui.display_message(i18n["language_set"].format(settings.language))
-        await settings.save_settings()
 
     elif args.information_dictionary:
         if args.dictionary:
@@ -168,8 +165,13 @@ async def main() -> None:
             logger.error(f"Словник {args.dictionary} не знайдено.")
             await cui.display_message(i18n["dictionary_not_found"].format(args.dictionary))
             return None
-        logger.debug(f"Виконання транслітерації з файлу {input_path} за словником {args.dictionary} у файл {output_path}")
+        logger.debug(
+            f"Виконання транслітерації з файлу {input_path} за словником {args.dictionary} у файл {output_path}"
+        )
         await files_mode(dm, args.dictionary, input_path, output_path)
+
+    else:
+        await interactive_mode(dm)
 
     return None
 
