@@ -65,7 +65,7 @@ class Settings(pydantic_settings.BaseSettings):
         if save_path:
             exclude = {}
         else:
-            exclude = {"PATH_LOG_DIR", "PATH_TEMP", "path_dictionaries", "path_internationalization"}
+            exclude = {"PATH_LOG_DIR", "PATH_TEMP", "path_dictionaries", "path_internationalization", "PATH_JSON_FILE_SETTINGS"}
 
         async with aiofiles.open(self.PATH_JSON_FILE_SETTINGS, mode='w', encoding='utf-8') as f:
             await f.write(self.model_dump_json(indent=4, exclude_none=True, exclude=exclude))
