@@ -375,3 +375,6 @@ cython_debug/
 /temp/
 /main.build/
 /main.dist/
+/main.onefile-build/
+/tb
+/tb.exe
