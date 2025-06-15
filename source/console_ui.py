@@ -5,6 +5,7 @@
 from rich.console import Console
 from rich.table import Table
 from rich.text import Text
+from rich.panel import Panel
 
 from source.dictionary import DictionaryManager, Dictionary
 from source.internationalization import i18n
@@ -22,7 +23,7 @@ class ConsoleUI:
         else:
             self.console = Console()
 
-    async def display_message(self, message: str) -> None:
+    async def display_message(self, message: str | Text) -> None:
         """
         Відображає повідомлення в консолі.
 
@@ -30,7 +31,7 @@ class ConsoleUI:
         """
         self.console.print(message)
 
-    async def get_input(self, prompt: str) -> str:
+    async def get_input(self, prompt: str | Text) -> str:
         """
         Отримує вхідні дані від користувача.
 
@@ -38,6 +39,15 @@ class ConsoleUI:
         :return: Введені дані.
         """
         return self.console.input(prompt)
+
+    async def display_panel(self, text):
+        """
+        Відображає текст в панелі.
+
+        :param text: Текст для відображення.
+        """
+        panel = Panel(text, expand=False, padding=(1, 2))
+        self.console.print(panel, justify="center")
 
 
     async def display_dictionary(self, dictionary: Dictionary):
