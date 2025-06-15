@@ -1,18 +1,20 @@
 {
     "info": {
         "code_3": "ukr",
+        "code_2": "uk",
         "name": "Українська",
         "name_latin": "Ukrajins`ka",
         "name_eng": "Ukrainian"
     },
     "data": {
+        "welcome_message": "Транслітбукв (Translitbukv)\nВерсія: {} | Мова: {}",
         "yes": "Так",
         "no": "Ні",
         "true": "Правда",
         "false": "Брехня",
         "no_data": "Немає даних",
 
-        "dictionaries_list_title": "Список доступних словників",
+        "dictionaries_list_title": "Список доступних словників: ",
         "dictionary_info_title": "Інформація про словник",
         "name": "Назва",
         "description": "Опис",
