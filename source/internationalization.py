@@ -15,7 +15,10 @@ class LanguageModel(pydantic.BaseModel):
 
     class InfoModel(pydantic.BaseModel):
         code_3: str
+        code_2: str
+
         name: str
+        name_latin: str = ""
         name_eng: str
 
     data: dict[str, str] | None = None
