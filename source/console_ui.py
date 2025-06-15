@@ -86,7 +86,7 @@ class ConsoleUI:
             await self.display_message(i18n["no_dictionaries_found"])
             return
 
-        table = Table(title=i18n["dictionaries_list_title"])
+        table = Table(title=Text(i18n["dictionaries_list_title"], justify="left"))
         table.add_column(i18n["name"], style="cyan", no_wrap=True, min_width=5)
         table.add_column(i18n["author"], style="green", no_wrap=True, min_width=5)
         table.add_column(i18n["example"], style="blue", no_wrap=True, max_width=40)
