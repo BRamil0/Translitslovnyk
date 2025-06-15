@@ -1,6 +1,7 @@
 """
 Файл відповідає за налаштування програми.
 """
+import sys
 import json
 from pathlib import Path
 
@@ -32,12 +33,14 @@ class Settings(pydantic_settings.BaseSettings):
     is_show_log: bool = False
     LOG_FORMAT: str = "<y>IDP:{process}</y> <ly>SPT:{elapsed}</ly> | <g>{time:YYYY-MM-DD}</g> <lg>{time:HH:mm:ss}</lg> | <level>{level}</level> | <m>F:{file}</m> <lm>L:{line} FU:{function}</lm> | {message}"
 
-    path_dictionaries: Path = Path(__file__).parent.parent / "dictionaries"
-    path_internationalization: Path = Path(__file__).parent.parent / "internationalization"
+    BASE_PATH: Path = Path(sys.argv[0]).resolve().parent
 
-    PATH_LOG_DIR: Path = Path(__file__).parent.parent / "temp" / "logs"
-    PATH_TEMP: Path = Path(__file__).parent.parent / "temp"
-    PATH_JSON_FILE_SETTINGS: Path = Path(__file__).parent.parent / "config.json"
+    path_dictionaries: Path = BASE_PATH / "dictionaries"
+    path_internationalization: Path = BASE_PATH / "internationalization"
+
+    PATH_LOG_DIR: Path = BASE_PATH / "temp" / "logs"
+    PATH_TEMP: Path = BASE_PATH / "temp"
+    PATH_JSON_FILE_SETTINGS: Path = BASE_PATH / "config.json"
 
     model_config = pydantic_settings.SettingsConfigDict(json_file=PATH_JSON_FILE_SETTINGS)
 
@@ -65,7 +68,7 @@ class Settings(pydantic_settings.BaseSettings):
         if save_path:
             exclude = {}
         else:
-            exclude = {"PATH_LOG_DIR", "PATH_TEMP", "path_dictionaries", "path_internationalization", "PATH_JSON_FILE_SETTINGS"}
+            exclude = {"BASE_PATH", "PATH_LOG_DIR", "PATH_TEMP", "path_dictionaries", "path_internationalization", "PATH_JSON_FILE_SETTINGS"}
 
         async with aiofiles.open(self.PATH_JSON_FILE_SETTINGS, mode='w', encoding='utf-8') as f:
             await f.write(self.model_dump_json(indent=4, exclude_none=True, exclude=exclude))

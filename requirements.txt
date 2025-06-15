@@ -3,3 +3,4 @@ pydantic
 pydantic-settings
 loguru
 rich
+nuitka
