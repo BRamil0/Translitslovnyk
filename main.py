@@ -95,7 +95,7 @@ async def main() -> None:
     await dm.index()
     args: argparse.Namespace = await parse_command_line_arguments()
 
-    if not args.not_welcome:
+    if not args.no_hello:
         await cui.display_panel(i18n["welcome_message"].format(settings.version, i18n.get_lm().info.name))
 
     if args.language:
