@@ -89,7 +89,7 @@ class ConsoleUI:
         table = Table(title=Text(i18n["dictionaries_list_title"], justify="left"))
         table.add_column(i18n["name"], style="cyan", no_wrap=True, min_width=5)
         table.add_column(i18n["author"], style="green", no_wrap=True, min_width=5)
-        table.add_column(i18n["example"], style="blue", no_wrap=True, max_width=40)
+        table.add_column(i18n["example"], style="blue", no_wrap=True, max_width=20)
         table.add_column(i18n["id"], style="cyan", no_wrap=True, min_width=5)
         table.add_column(i18n["version"], style="green", no_wrap=True, min_width=5)
         table.add_column(i18n["file_name"], style="cyan", no_wrap=True, min_width=5)
