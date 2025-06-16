@@ -1,12 +1,12 @@
-## Транслітбукв (Translitbukv)
+## Транслітсловник (Translitslovnyk)
 #### Опис
-Транслітбукв — консольна програма для транслітерації тексту за словником.
+Транслітсловник — консольна програма для транслітерації тексту за словником.
 
 ### Встановлення
 1. Завантажте Python 3.13 або новішу версію.
 2. Скопіюйте репозиторій:
     ```bash
-    git clone https://github/https://github.com/BRamil0/Translitbukv.git/
+    git clone https://github/https://github.com/BRamil0/Translitslovnyk.git/
     ```
 3. Перейдіть до каталогу проєкту.
 4. Створіть віртуальне середовище та встановіть залежності:
@@ -21,7 +21,7 @@
     ```
 5. Скомпілюйте файли, треба мати компілятор C: (Необов'язково)
    ```bash
-   nuitka --standalone --onefile --windows-console-mode=force --output-filename=tb main.py
+   nuitka --standalone --onefile --windows-console-mode=force --output-filename=ts main.py
    ```
    Додатково можна використовувати такі параметри:
    - `--lto=no` — Для вимкнення LTO.
@@ -30,7 +30,7 @@
 ###  Використання
 Просто напишіть у консолі (якщо ви додали бінарний файл до PATH):
 ```bash
-tb [аргументи]
+ts [аргументи]
 ```
 Або запустіть через Python:
 ```bash
