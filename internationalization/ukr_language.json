@@ -7,7 +7,7 @@
         "name_eng": "Ukrainian"
     },
     "data": {
-        "welcome_message": "Транслітбукв (Translitbukv)\nВерсія: {} | Мова: {}",
+        "welcome_message": "Транслітсловник (Translitslovnyk)\nВерсія: {} | Мова: {}",
         "yes": "Так",
         "no": "Ні",
         "true": "Правда",
