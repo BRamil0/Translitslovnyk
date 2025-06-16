@@ -118,7 +118,7 @@ async def main() -> None:
         is_show_log = i18n["yes"] if settings.is_show_log else i18n["no"]
 
         await cui.display_message(i18n["program_info"].format(settings.version,
-                                                              "https://github.com/BRamil0/Translitbukv/",
+                                                              "https://github.com/BRamil0/Translitslovnyk/",
                                                               i18n.get_lm().info.name, is_log, is_show_log))
 
     elif args.version:
@@ -130,7 +130,7 @@ async def main() -> None:
                                                              "qulowg@gmail.com"))
 
     elif args.github:
-        await cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitbukv"))
+        await cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitslovnyk"))
 
     elif args.information_dictionary:
         if args.dictionary:
