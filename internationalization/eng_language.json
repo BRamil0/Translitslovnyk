@@ -1,0 +1,78 @@
+{
+    "info": {
+        "code_3": "eng",
+        "code_2": "en",
+        "name": "English",
+        "name_latin": "English",
+        "name_eng": "English"
+    },
+    "data": {
+        "welcome_message": "Translitslovnyk\nVersion: {} | Language: {}",
+        "yes": "Yes",
+        "no": "No",
+        "true": "True",
+        "false": "False",
+        "no_data": "No data",
+
+        "dictionaries_list_title": "Available dictionaries: ",
+        "dictionary_info_title": "Dictionary information",
+        "name": "Name",
+        "description": "Description",
+        "example": "Example",
+
+        "author": "Author",
+        "author_url": "Author URL",
+        "author_email": "Author e-mail",
+
+        "from_language": "From language",
+        "to_language": "To language",
+
+        "version": "Version",
+        "id": "Identifier",
+
+        "license": "Licence",
+        "license_url": "Licence URL",
+
+        "created_at": "Created at",
+        "updated_at": "Updated at",
+
+        "source": "Source",
+        "source_url": "Source URL",
+
+        "file_name": "File name",
+        "file_path": "File path",
+
+        "text": "Text",
+        "title": "Title: ",
+        "date": "Date: ",
+        "enter_dictionary": "Enter dictionary: ",
+        "dictionary_selected": "Dictionary selected: {}",
+        "dictionary_not_found": "Dictionary not found: {}",
+        "enter_text_to_transliterate": "Enter text to transliterate (type exit_transliterate_mode to quit): ",
+        "transliteration_result": "Transliteration result: {}",
+        "transliteration_exiting": "Exiting transliteration mode.",
+
+        "program_info": "Programme information:\n • Author: Radomyr \"BRamil\" B.\n • Version: {}\n • Github: {}\n\nSettings:\n • Language: {}\n • Logging enabled: {}\n • Show log: {}",
+        "version_info": "Programme version: {}",
+        "author_info": "Programme author: Radomyr \"BRamil\" B.\nWebsite: {}\nGitHub: {}\nE-mail: {}",
+        "github_info": "You can find the programme's source code on GitHub: {}",
+        "language_set": "Language has been set to: {}",
+        "language_file_not_found": "Language file not found: {}. Language not set.",
+
+        "--help_help": "Show command-line arguments help.",
+        "--dictionary_help": "Path to dictionary for transliteration.",
+        "--text_help": "Text to transliterate.",
+        "--input_help": "Path to input file containing text for transliteration.",
+        "--output_help": "Path to output file to save transliteration results.",
+        "--version_help": "Show programme version.",
+        "--author_help": "Show information about the programme author.",
+        "--github_help": "Show the link to the programme's GitHub repository.",
+        "--information_help": "Show programme information.",
+        "--information_dictionary_help": "Show information about a dictionary by its name, filename, or ID.",
+        "--list_dictionary_help": "List available dictionaries.",
+        "--language_help": "Language for localisation.",
+        "--no_hello_help": "Do not show welcome message at programme start.",
+
+        "description_argparse": "Text transliteration using a dictionary."
+    }
+}
