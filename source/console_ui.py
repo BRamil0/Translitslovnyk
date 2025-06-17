@@ -23,7 +23,7 @@ class ConsoleUI:
         else:
             self.console = Console()
 
-    async def display_message(self, message: str | Text) -> None:
+    def display_message(self, message: str | Text) -> None:
         """
         Відображає повідомлення в консолі.
 
@@ -31,7 +31,7 @@ class ConsoleUI:
         """
         self.console.print(message)
 
-    async def get_input(self, prompt: str | Text) -> str:
+    def get_input(self, prompt: str | Text) -> str:
         """
         Отримує вхідні дані від користувача.
 
@@ -40,7 +40,7 @@ class ConsoleUI:
         """
         return self.console.input(prompt)
 
-    async def display_panel(self, text):
+    def display_panel(self, text):
         """
         Відображає текст в панелі.
 
@@ -50,7 +50,7 @@ class ConsoleUI:
         self.console.print(panel, justify="center")
 
 
-    async def display_dictionary(self, dictionary: Dictionary):
+    def display_dictionary(self, dictionary: Dictionary):
         """
         Відображає інформацію про словник.
 
@@ -76,14 +76,14 @@ class ConsoleUI:
 
         self.console.print(text)
 
-    async def display_dictionary_list(self, dictionary_manager: DictionaryManager) -> None:
+    def display_dictionary_list(self, dictionary_manager: DictionaryManager) -> None:
         """
         Відображає список словників.
 
         :param dictionary_manager: Менеджер словників.
         """
         if not dictionary_manager.get_list_dictionaries():
-            await self.display_message(i18n["no_dictionaries_found"])
+            self.display_message(i18n["no_dictionaries_found"])
             return
 
         table = Table(title=Text(i18n["dictionaries_list_title"], justify="left"))

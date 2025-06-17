@@ -20,34 +20,34 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
     Режим інтерактивного використання програми.
     """
     if selected_dictionary is None:
-        await cui.display_dictionary_list(dm)
+        cui.display_dictionary_list(dm)
         while True:
-            selected_dictionary: str = await cui.get_input(i18n["enter_dictionary"])
+            selected_dictionary: str = cui.get_input(i18n["enter_dictionary"])
             dictionary = dm.search_dictionary(selected_dictionary)
             if dictionary is None:
-                await cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
-                await cui.display_dictionary_list(dm)
+                cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
+                cui.display_dictionary_list(dm)
                 continue
-            await cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
+            cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
             break
     else:
         dictionary = dm.search_dictionary(selected_dictionary)
         if dictionary is None:
             logger.error(f"Словник {selected_dictionary} не знайдено.")
-            await cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
+            cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
             return None
-        await cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
+        cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
 
     translator: Translate = Translate(dictionary)
     if selected_text is None:
         while True:
-            text: str = await cui.get_input(i18n["enter_text_to_transliterate"])
+            text: str = cui.get_input(i18n["enter_text_to_transliterate"])
             if text.lower() == "exit_transliterate_mode":
-                await cui.display_message(i18n["transliteration_exiting"])
+                cui.display_message(i18n["transliteration_exiting"])
                 break
-            await cui.display_message(i18n["transliteration_result"].format(translator.transliterate(text)))
+            cui.display_message(i18n["transliteration_result"].format(translator.transliterate(text)))
     else:
-        await cui.display_message(
+        cui.display_message(
             i18n["transliteration_result"].format(
                 translator.transliterate(selected_text)
             )
@@ -76,7 +76,7 @@ async def main() -> None:
         logger.error(
             f"Файл локалізації не знайдено: {FNFError}. Перевірте наявність файлу в директорії {settings.path_internationalization}. Або змініть config.json, щоб вказати іншу мову."
         )
-        await cui.display_message(
+        cui.display_message(
             "Не вдалося завантажити мову, рекомендується почистити файл config.json"
         )
         raise FNFError
@@ -98,30 +98,30 @@ async def main() -> None:
             await internationalization.load_localization()
 
             logger.error(f"Файл локалізації для мови {args.language} не знайдено: {FNFError}.")
-            await cui.display_message(i18n["language_file_not_found"].format(args.language))
+            cui.display_message(i18n["language_file_not_found"].format(args.language))
             return None
         settings.language = args.language
-        await cui.display_message(i18n["language_set"].format(settings.language))
+        cui.display_message(i18n["language_set"].format(settings.language))
         await settings.save_settings()
 
     if args.information:
         is_log = i18n["yes"] if settings.is_log else i18n["no"]
         is_show_log = i18n["yes"] if settings.is_show_log else i18n["no"]
 
-        await cui.display_message(i18n["program_info"].format(settings.version,
+        cui.display_message(i18n["program_info"].format(settings.version,
                                                               "https://github.com/BRamil0/Translitslovnyk/",
                                                               i18n.get_lm().info.name, is_log, is_show_log))
 
     elif args.version:
-        await cui.display_message(i18n["version_info"].format(settings.version))
+        cui.display_message(i18n["version_info"].format(settings.version))
 
     elif args.author:
-        await cui.display_message(i18n["author_info"].format("https://radomyr.net/",
+        cui.display_message(i18n["author_info"].format("https://radomyr.net/",
                                                              "https://github.com/BRamil0",
                                                              "qulowg@gmail.com"))
 
     elif args.github:
-        await cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitslovnyk"))
+        cui.display_message(i18n["github_info"].format("https://github.com/BRamil0/Translitslovnyk"))
 
     elif args.information_dictionary:
         if args.dictionary:
@@ -132,22 +132,22 @@ async def main() -> None:
         dictionary: Dictionary | None = dm.search_dictionary(dictionary_name)
         if dictionary is None:
             logger.error(f"Словник {dictionary_name} не знайдено.")
-            await cui.display_message(i18n["dictionary_not_found"].format(dictionary_name))
+            cui.display_message(i18n["dictionary_not_found"].format(dictionary_name))
             return None
         await cui.display_dictionary(dictionary)
 
     elif args.list_dictionary:
         if not dm.get_list_dictionaries():
-            await cui.display_message(i18n["no_dictionaries_found"])
+            cui.display_message(i18n["no_dictionaries_found"])
         else:
-            await cui.display_dictionary_list(dm)
+            cui.display_dictionary_list(dm)
 
     elif (args.dictionary or args.text or args.input) and not args.output:
         if args.input:
             input_path: Path = Path(args.input)
             if not input_path.exists():
                 logger.error(f"Файл {input_path} не знайдено.")
-                await cui.display_message(i18n["input_file_not_found"].format(input_path))
+                cui.display_message(i18n["input_file_not_found"].format(input_path))
                 return None
             async with aiofiles.open(input_path, mode='r', encoding='utf-8') as file:
                 text = await file.read()
@@ -160,11 +160,11 @@ async def main() -> None:
         output_path: Path = Path(args.output)
         if not input_path.exists():
             logger.error(f"Файл {input_path} не знайдено.")
-            await cui.display_message(i18n["input_file_not_found"].format(input_path))
+            cui.display_message(i18n["input_file_not_found"].format(input_path))
             return None
         if args.dictionary not in dm.get_list_dictionaries():
             logger.error(f"Словник {args.dictionary} не знайдено.")
-            await cui.display_message(i18n["dictionary_not_found"].format(args.dictionary))
+            cui.display_message(i18n["dictionary_not_found"].format(args.dictionary))
             return None
         logger.debug(
             f"Виконання транслітерації з файлу {input_path} за словником {args.dictionary} у файл {output_path}"
