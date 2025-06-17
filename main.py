@@ -63,16 +63,23 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
                 break
             await cui.display_message(i18n["transliteration_result"].format(translator.transliterate(text)))
     else:
-        await cui.display_message(i18n["transliteration_result"].format(translator.transliterate(selected_text)))
+        await cui.display_message(
+            i18n["transliteration_result"].format(
+                translator.transliterate(selected_text)
+            )
+        )
     return None
 
-async def files_mode(dm: DictionaryManager, dictionary: str, input_path: Path, output_path: Path):
-    async with aiofiles.open(str(input_path), mode='r', encoding='utf-8') as infile, \
-               aiofiles.open(str(output_path), mode='w', encoding='utf-8') as outfile:
-        async for line in infile:
-            processed_line: str = Translate(dm[dictionary]).transliterate(line)
-            await outfile.write(processed_line + '\n')
 
+async def files_mode(dm: DictionaryManager, dictionary_name: str, input_path: Path, output_path: Path):
+    # Створюємо транслятор ОДИН РАЗ
+    translator = Translate(dm[dictionary_name])
+
+    async with (aiofiles.open(str(input_path), mode="r", encoding="utf-8") as infile,
+                aiofiles.open(str(output_path), mode="w", encoding="utf-8") as outfile,):
+        async for line in infile:
+            processed_line: str = translator.transliterate(line)
+            await outfile.write(processed_line)
 
 async def main() -> None:
     """
