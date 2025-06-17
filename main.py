@@ -87,7 +87,7 @@ async def main() -> None:
     args: argparse.Namespace = await parse_command_line_arguments()
 
     if not args.no_hello:
-        await cui.display_panel(i18n["welcome_message"].format(settings.version, i18n.get_lm().info.name))
+        cui.display_panel(i18n["welcome_message"].format(settings.version, i18n.get_lm().info.name))
 
     if args.language:
         try:
@@ -180,5 +180,5 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, EOFError, UnicodeDecodeError) as error:
-        asyncio.run(cui.display_message("\n" + i18n["transliteration_exiting"]))
+        cui.display_message("\n" + i18n["transliteration_exiting"])
         logger.debug(f"Вихід з програми через помилку: {error}, скоріше за все, це було викликано натисканням Ctrl+C або Ctrl+D.")
