@@ -15,22 +15,6 @@ from source.command_line_handler import parse_command_line_arguments
 from source.logger import logger
 from source.config import settings
 
-async def search_dictionary(dm: DictionaryManager, dictionary_name: str) -> Dictionary | None:
-    """
-    Пошук словника за назвою.
-
-    :param dm: Менеджер словників.
-    :param dictionary_name: Назва словника для пошуку.
-    :return: Знайдений словник або None, якщо не знайдено.
-    """
-    dictionary: Dictionary | None = None
-    fields = ["id", "name", "file_path", "file_name"]
-    for field in fields:
-        dictionary = dm.search_dictionary(dictionary_name, field)
-        if dictionary is not None:
-            break
-    return dictionary
-
 async def interactive_mode(dm: DictionaryManager, selected_text: str | None = None, selected_dictionary: str | None = None) -> None:
     """
     Режим інтерактивного використання програми.
@@ -39,7 +23,7 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
         await cui.display_dictionary_list(dm)
         while True:
             selected_dictionary: str = await cui.get_input(i18n["enter_dictionary"])
-            dictionary = await search_dictionary(dm, selected_dictionary)
+            dictionary = dm.search_dictionary(selected_dictionary)
             if dictionary is None:
                 await cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
                 await cui.display_dictionary_list(dm)
@@ -47,7 +31,7 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
             await cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
             break
     else:
-        dictionary = await search_dictionary(dm, selected_dictionary)
+        dictionary = dm.search_dictionary(selected_dictionary)
         if dictionary is None:
             logger.error(f"Словник {selected_dictionary} не знайдено.")
             await cui.display_message(i18n["dictionary_not_found"].format(selected_dictionary))
@@ -145,7 +129,7 @@ async def main() -> None:
         else:
             dictionary_name = args.information_dictionary
 
-        dictionary: Dictionary | None = await search_dictionary(dm, dictionary_name)
+        dictionary: Dictionary | None = dm.search_dictionary(dictionary_name)
         if dictionary is None:
             logger.error(f"Словник {dictionary_name} не знайдено.")
             await cui.display_message(i18n["dictionary_not_found"].format(dictionary_name))
