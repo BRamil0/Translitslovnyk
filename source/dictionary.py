@@ -186,8 +186,8 @@ class Dictionary:
                 return False
             logger.info(f"[Dictionary] Словник {self.file.name} завантажено успішно.")
             return True
-        except (IOError, json.JSONDecodeError) as e:
-            logger.error(f"[Dictionary] Помилка при завантаженні словника {self.file.name}. Детальніше: {e}")
+        except (IOError, json.JSONDecodeError, pydantic.ValidationError) as e:
+            logger.error(f"[Dictionary] Помилка при завантаженні або валідації словника {self.file.name}. Детальніше: {e}")
             return False
 
     async def dump(self) -> bool:
