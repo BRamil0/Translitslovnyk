@@ -1,7 +1,7 @@
 """
 Клас для транслітерування тексту за словником.
 """
-
+import unicodedata
 from source.dictionary import Dictionary
 from source.logger import logger
 
@@ -13,6 +13,7 @@ class Translate:
 
     dictionary: Dictionary
     text: str
+    _normalized_data: dict
 
     def __init__(self, dictionary: Dictionary, text: str | None = None) -> None:
         if not isinstance(dictionary, Dictionary):
@@ -21,11 +22,13 @@ class Translate:
         if not isinstance(text, str) and text is not None:
             logger.error("[Translate] Помилка ініціалізації: 'text' має бути рядком")
             raise TypeError("Параметр 'text' має бути рядком")
-        self.dictionary = dictionary
+
+        self.set_dictionary(dictionary)
+
         if text is None:
             text = ""
         self.text = text
-        logger.debug(f"[Translate] Ініціалізовано об'єкт з текстом: '{self.text}' та словником з {self.dictionary.dictionary} елементами")
+        logger.debug(f"[Translate] Ініціалізовано об'єкт з текстом: '{self.text}' та словником з {len(self.dictionary.dictionary.data)} елементами")
 
     def get_text(self) -> str:
         return self.text
@@ -44,8 +47,14 @@ class Translate:
         if not isinstance(new_dictionary, Dictionary):
             logger.error("[Translate] Помилка ініціалізації: 'dictionary' має бути екземпляром класу Dictionary")
             raise TypeError("Параметр 'dictionary' має бути екземпляром класу Dictionary")
-        logger.info(f"[Translate] Оновлено словник з {len(self.dictionary.dictionary)} до {len(new_dictionary.dictionary)} елементів")
+
         self.dictionary = new_dictionary
+        # <<< ЗМІНА: Нормалізуємо дані словника ОДИН раз при його встановленні
+        self._normalized_data = {
+            unicodedata.normalize('NFC', k): v
+            for k, v in self.dictionary.dictionary.data.items()
+        }
+        logger.info(f"[Translate] Оновлено та нормалізовано словник з {len(self.dictionary.dictionary.data)} до {len(self._normalized_data)} елементів")
 
     def transliterate(self, text: str | None = None) -> str:
         """
@@ -56,21 +65,21 @@ class Translate:
         if text is not None:
             self.set_text(text)
 
-        logger.debug(f"[Translate] Початок транслітерації {self.text}")
+        normalized_input_text = unicodedata.normalize('NFC', self.text)
+        logger.debug(f"[Translate] Початок транслітерації нормалізованого тексту: {normalized_input_text}")
+
         result = []
         i = 0
-        text_len = len(self.text)
+        text_len = len(normalized_input_text)
 
-        # Сортуємо ключі словника за спаданням довжини ключа
-        keys_sorted = sorted(self.dictionary.dictionary.data.keys(), key=len, reverse=True)
+        keys_sorted = sorted(self._normalized_data.keys(), key=len, reverse=True)
 
         while i < text_len:
             matched = False
             for key in keys_sorted:
                 key_len = len(key)
-                # Перевіряємо, чи входить ключ у підрядок тексту
-                if i + key_len <= text_len and self.text[i:i + key_len] == key:
-                    replacement = self.dictionary[key]
+                if i + key_len <= text_len and normalized_input_text[i:i + key_len] == key:
+                    replacement = self._normalized_data[key]
                     logger.info(
                         f"[Translate] Заміна: '{key}' -> '{replacement}' на позиції {i}"
                     )
@@ -79,10 +88,11 @@ class Translate:
                     matched = True
                     break
             if not matched:
+                char_to_append = normalized_input_text[i]
                 logger.warning(
-                    f"[Translate] Символ '{self.text[i]}' на позиції {i} не знайдено у словнику. Залишається без змін."
+                    f"[Translate] Символ '{char_to_append}' на позиції {i} не знайдено у словнику. Залишається без змін."
                 )
-                result.append(self.text[i])
+                result.append(char_to_append)
                 i += 1
 
         final_text = ''.join(result)
