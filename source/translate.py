@@ -1,5 +1,6 @@
 """
 Клас для транслітерування тексту за словником.
+Версія з покращеною нормалізацією Unicode та інтелектуальною обробкою регістру.
 """
 import unicodedata
 from source.dictionary import Dictionary
@@ -14,21 +15,16 @@ class Translate:
     dictionary: Dictionary
     text: str
     _normalized_data: dict
+    _sorted_keys: list
 
     def __init__(self, dictionary: Dictionary, text: str | None = None) -> None:
         if not isinstance(dictionary, Dictionary):
             logger.error("[Translate] Помилка ініціалізації: 'dictionary' має бути екземпляром класу Dictionary")
             raise TypeError("Параметр 'dictionary' має бути екземпляром класу Dictionary")
-        if not isinstance(text, str) and text is not None:
-            logger.error("[Translate] Помилка ініціалізації: 'text' має бути рядком")
-            raise TypeError("Параметр 'text' має бути рядком")
 
+        # Ініціалізація через сеттери для уникнення дублювання коду
         self.set_dictionary(dictionary)
-
-        if text is None:
-            text = ""
-        self.text = text
-        logger.debug(f"[Translate] Ініціалізовано об'єкт з текстом: '{self.text}' та словником з {len(self.dictionary.dictionary.data)} елементами")
+        self.set_text(text if text is not None else "")
 
     def get_text(self) -> str:
         return self.text
@@ -37,7 +33,7 @@ class Translate:
         if not isinstance(new_text, str):
             logger.error("[Translate] Помилка ініціалізації: 'text' має бути рядком")
             raise TypeError("Параметр 'text' має бути рядком")
-        logger.info(f"[Translate] Змінено текст з '{self.text}' на '{new_text}'")
+        logger.info(f"[Translate] Змінено текст з '{self.text if hasattr(self, 'text') else ''}' на '{new_text}'")
         self.text = new_text
 
     def get_dictionary(self) -> Dictionary:
@@ -49,19 +45,33 @@ class Translate:
             raise TypeError("Параметр 'dictionary' має бути екземпляром класу Dictionary")
 
         self.dictionary = new_dictionary
-        # <<< ЗМІНА: Нормалізуємо дані словника ОДИН раз при його встановленні
+
+        # Нормалізуємо дані словника ОДИН раз при його встановленні
         self._normalized_data = {
             unicodedata.normalize('NFC', k): v
             for k, v in self.dictionary.dictionary.data.items()
         }
-        logger.info(f"[Translate] Оновлено та нормалізовано словник з {len(self.dictionary.dictionary.data)} до {len(self._normalized_data)} елементів")
+
+        # Сортуємо ключі також ОДИН раз
+        self._sorted_keys = sorted(self._normalized_data.keys(), key=len, reverse=True)
+
+        logger.info(f"[Translate] Оновлено, нормалізовано та відсортовано ключі для словника з {len(self._normalized_data)} елементів")
+
+    # Окрема функція для обробки регістру
+    def _get_replacement_with_case(self, source_segment: str, replacement: str) -> str:
+        """Аналізує регістр вхідного сегмента та застосовує його до заміни."""
+        if source_segment.isupper() and len(source_segment) > 1:
+            return replacement.upper()
+        if source_segment.istitle():
+            return replacement.title()
+        # Для односимвольних або повністю нижнього регістру заміна залишається як є
+        return replacement
 
     def transliterate(self, text: str | None = None) -> str:
         """
-        Ітеративно транслітує текст, використовуючи словник.
-        Якщо ключа не знайдено, символ залишається без змін.
+        Ітеративно транслітує текст, використовуючи нормалізований словник
+        та інтелектуальну обробку регістру.
         """
-
         if text is not None:
             self.set_text(text)
 
@@ -72,21 +82,26 @@ class Translate:
         i = 0
         text_len = len(normalized_input_text)
 
-        keys_sorted = sorted(self._normalized_data.keys(), key=len, reverse=True)
-
         while i < text_len:
             matched = False
-            for key in keys_sorted:
+            for key in self._sorted_keys:
                 key_len = len(key)
-                if i + key_len <= text_len and normalized_input_text[i:i + key_len] == key:
-                    replacement = self._normalized_data[key]
+                source_segment = normalized_input_text[i:i + key_len]
+
+                # Порівнюємо у нижньому регістрі для гнучкості
+                if source_segment.lower() == key.lower():
+                    #Використовуємо функцію для визначення регістру
+                    base_replacement = self._normalized_data[key]
+                    replacement = self._get_replacement_with_case(source_segment, base_replacement)
+
                     logger.info(
-                        f"[Translate] Заміна: '{key}' -> '{replacement}' на позиції {i}"
+                        f"[Translate] Заміна: '{source_segment}' -> '{replacement}' (правило: '{key}' -> '{base_replacement}')"
                     )
                     result.append(replacement)
                     i += key_len
                     matched = True
                     break
+
             if not matched:
                 char_to_append = normalized_input_text[i]
                 logger.warning(
