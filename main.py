@@ -19,7 +19,7 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
     """
     Режим інтерактивного використання програми.
     """
-    if selected_dictionary is None:
+    if not selected_dictionary:
         cui.display_dictionary_list(dm)
         while True:
             selected_dictionary: str = cui.get_input(i18n["enter_dictionary"])
@@ -39,7 +39,7 @@ async def interactive_mode(dm: DictionaryManager, selected_text: str | None = No
         cui.display_message(i18n["dictionary_selected"].format(dictionary.dictionary.info.name))
 
     translator: Translate = Translate(dictionary)
-    if selected_text is None:
+    if not selected_text:
         while True:
             text: str = cui.get_input(i18n["enter_text_to_transliterate"])
             if text.lower() == "exit_transliterate_mode":
