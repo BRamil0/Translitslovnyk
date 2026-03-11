@@ -16,21 +16,15 @@ Translitslovnyk is a console application for transliterating text using dictiona
 - Support for user interface localization.
 
 ### Installation
-1.  Download Python 3.13 or a newer version.
+1.  Download Python 3.14 or a newer version.
 2.  Clone the repository:
     ```bash
     git clone https://github.com/BRamil0/Translitslovnyk.git
     ```
 3.  Navigate to the project directory.
-4.  Create a virtual environment and install the dependencies:
+4.  Create a virtual environment and install the dependencies via [uv](https://github.com/astral-sh/uv) :
     ```bash
-    python -m venv venv
-    pip install -r requirements.txt
-    ```
-    If you have [uv](https://github.com/astral-sh/uv) installed:
-    ```bash
-    uv venv
-    uv pip install -r requirements.txt
+    uv sync
     ```
 5.  Compile the files (requires a C compiler, Optional):
     ```bash

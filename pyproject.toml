@@ -1,0 +1,14 @@
+[project]
+name = "Translitslovnyk"
+version = "1.0.0"
+description = "Translitslovnyk is a console application for transliterating text using dictionaries."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "loguru>=0.7.3",
+    "nuitka>=4.0.4",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.13.1",
+    "rich>=14.3.3",
+]

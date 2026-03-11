@@ -16,21 +16,15 @@ __[English](README_ENG.md)__
  - Підтримка локалізації інтерфейсу користувача.
 
 ### Встановлення
-1. Завантажте Python 3.13 або новішу версію.
+1. Завантажте Python 3.14 або новішу версію.
 2. Скопіюйте репозиторій:
     ```bash
     git clone https://github.com/BRamil0/Translitslovnyk.git
     ```
 3. Перейдіть до каталогу проєкту.
-4. Створіть віртуальне середовище та встановіть залежності:
+4. Створіть віртуальне середовище та встановіть залежності через [uv](https://github.com/astral-sh/uv):
     ```bash
-    python -m venv venv
-    pip install -r requirements.txt
-    ```
-    Якщо встановлено [uv](https://github.com/astral-sh/uv):
-    ```bash
-    uv new venv
-    uv install
+    uv sync
     ```
 5. Скомпілюйте файли, треба мати компілятор C: (Необов'язково)
    ```bash
